@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace swifty.Code {
@@ -11,7 +12,7 @@ namespace swifty.Code {
             List<SyntaxToken> tokens = new List<SyntaxToken>();
             do {
                 token = lexer.NextToken();
-                if (token.Kind != SyntaxKind.WhitespaceToken || token.Kind!=SyntaxKind.BadToken) {
+                if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind!=SyntaxKind.BadToken) {
                     tokens.Add(token);
                 }
             } while (token.Kind!=SyntaxKind.EndofFileToken);
