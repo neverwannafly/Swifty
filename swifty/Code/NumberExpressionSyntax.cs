@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace swifty.Code {
-    sealed class NumberExpressionSyntax : ExpressionSyntax {
+    public sealed class NumberExpressionSyntax : ExpressionSyntax {
         public NumberExpressionSyntax(SyntaxToken numberToken) {
             NumberToken = numberToken;
         }

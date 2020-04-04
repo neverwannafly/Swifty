@@ -1,5 +1,5 @@
 namespace swifty.Code {
-    enum SyntaxKind {
+    public enum SyntaxKind {
         NumberToken,
         WhitespaceToken,
         PlusToken,

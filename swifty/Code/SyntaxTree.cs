@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace swifty.Code {
-    sealed class SyntaxTree {
+    public sealed class SyntaxTree {
         public SyntaxTree(IEnumerable<string> diagnostics, ExpressionSyntax root, SyntaxToken endofFileToken) {
             Diagnostics = diagnostics.ToArray();
             Root = root;
