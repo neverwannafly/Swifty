@@ -17,17 +17,19 @@ namespace swifty {
                 Console.ForegroundColor = color;
             }
         }
-        static void print(SyntaxNode node, string indent="") {
+        static void print(SyntaxNode node, string indent="", bool isLast=true) {
+            var marker = isLast? "└──" : "├──";
             Console.Write(indent);
+            Console.Write(marker);
             Console.Write(node.Kind);
             if (node is SyntaxToken t && t.Value!=null) {
-                Console.Write(" ");
-                Console.Write(t.Value);
+                Console.Write($" {t.Value}");
             }
+            indent += isLast ? "    ":"|    ";
             Console.WriteLine();
-            indent += "    ";
+            var lastChild = node.GetChildren().LastOrDefault();
             foreach (var child in node.GetChildren()) {
-                print(child, indent);
+                print(child, indent, child==lastChild);
             }
         }
     }
