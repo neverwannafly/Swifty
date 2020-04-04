@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace swifty.Code {
-    sealed class ParanthesisExpressionSyntax: ExpressionSyntax {
+    public sealed class ParanthesisExpressionSyntax: ExpressionSyntax {
         public ParanthesisExpressionSyntax(SyntaxToken leftParanthesis, ExpressionSyntax expr, SyntaxToken rightParanthesis) {
             LeftParanthesisToken = leftParanthesis;
             Expression = expr;

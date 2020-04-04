@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace swifty.Code {
-    class SyntaxToken : SyntaxNode {
+    public class SyntaxToken : SyntaxNode {
         public SyntaxToken(SyntaxKind kind, int position, string text, object value) {
             Kind = kind;
             Position = position;

@@ -3,8 +3,8 @@ using swifty.Code;
 using System.Linq;
 
 namespace swifty {
-    class Program {
-        static void Main(string[] args) {
+    internal static class Program {
+        private static void Main() {
             while (true) {
                 Console.Write("> ");
                 string line = Console.ReadLine();
@@ -35,7 +35,7 @@ namespace swifty {
             if (node is SyntaxToken t && t.Value!=null) {
                 Console.Write($" {t.Value}");
             }
-            indent += isLast ? "    ":"|    ";
+            indent += isLast ? "   ":"|   ";
             Console.WriteLine();
             var lastChild = node.GetChildren().LastOrDefault();
             foreach (var child in node.GetChildren()) {

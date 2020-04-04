@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 namespace swifty.Code {
-    sealed class BinaryExpressionSyntax : ExpressionSyntax {
+    public sealed class BinaryExpressionSyntax : ExpressionSyntax {
         public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right) {
             Left = left;
             OperatorToken = operatorToken;
