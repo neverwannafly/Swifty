@@ -10,8 +10,8 @@ namespace swifty.Code {
             return EvaluateExpression(_root);
         }
         private int EvaluateExpression(ExpressionSyntax root) {
-            if (root is NumberExpressionSyntax n) {
-                return (int)n.NumberToken.Value;
+            if (root is LiteralExpressionSyntax n) {
+                return (int)n.LiteralToken.Value;
             }
             if (root is BinaryExpressionSyntax b) {
                 var left = EvaluateExpression(b.Left);

@@ -31,19 +31,19 @@ namespace swifty.Code {
             _position++;
             return current; 
         }
-        private SyntaxToken Match(SyntaxKind kind) {
+        private SyntaxToken MatchToken(SyntaxKind kind) {
             // while(Current.Kind == SyntaxKind.WhitespaceToken) { NextToken();}
             if (Current.Kind == kind) return NextToken();
             _diagnostics.Add($"ERROR: Unexpected token <{Current.Kind}>, expected <{kind}>");
             return new SyntaxToken(kind, Current.Position, null, null);
         }
+        public SyntaxTree Parse() {
+            var expression = ParseExpression();
+            var endofFileToken = MatchToken(SyntaxKind.EndofFileToken);
+            return new SyntaxTree(_diagnostics ,expression, endofFileToken);
+        }
         private ExpressionSyntax ParseExpression() {
             return ParseTerm();
-        }
-        public SyntaxTree Parse() {
-            var expression = ParseTerm();
-            var endofFileToken = Match(SyntaxKind.EndofFileToken);
-            return new SyntaxTree(_diagnostics ,expression, endofFileToken);
         }
         private ExpressionSyntax ParseTerm() {
             var left = ParseFactor();
@@ -67,11 +67,11 @@ namespace swifty.Code {
             if (Current.Kind == SyntaxKind.LeftParanthesisToken) {
                 var left = NextToken();
                 var expression = ParseExpression();
-                var right = Match(SyntaxKind.RightParanthesisToken);
+                var right = MatchToken(SyntaxKind.RightParanthesisToken);
                 return new ParanthesisExpressionSyntax(left, expression, right);
             }
-            var numberToken = Match(SyntaxKind.NumberToken);
-            return new NumberExpressionSyntax(numberToken);
+            var numberToken = MatchToken(SyntaxKind.NumberToken);
+            return new LiteralExpressionSyntax(numberToken);
         }
     }
 }
