@@ -11,7 +11,7 @@ namespace swifty.Code {
             SyntaxToken token;
             List<SyntaxToken> tokens = new List<SyntaxToken>();
             do {
-                token = lexer.NextToken();
+                token = lexer.Lex();
                 if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind!=SyntaxKind.BadToken) {
                     tokens.Add(token);
                 }

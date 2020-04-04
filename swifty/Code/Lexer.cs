@@ -18,7 +18,7 @@ namespace swifty.Code {
         private void Next() {
             _position++;
         }
-        public SyntaxToken NextToken() {
+        public SyntaxToken Lex() {
             if (_position >= _text.Length) {
                 return new SyntaxToken(SyntaxKind.EndofFileToken, _position, "\0", null);
             }
