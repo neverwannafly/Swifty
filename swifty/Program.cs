@@ -1,6 +1,10 @@
 ﻿using System;
-using swifty.Code;
 using System.Linq;
+using System.Collections.Generic;
+
+using swifty.Code;
+using swifty.Code.Syntaxt;
+using swifty.Code.Annotation;
 
 namespace swifty {
     internal static class Program {
@@ -8,19 +12,25 @@ namespace swifty {
             while (true) {
                 Console.Write("> ");
                 string line = Console.ReadLine();
+
                 var syntaxTree = SyntaxTree.Parse(line);
+                var annotator = new Annotator();
+
                 var color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 print(syntaxTree.Root);
                 Console.ForegroundColor = color;
 
-                if (!syntaxTree.Diagnostics.Any()) {
-                    Evaluator eval = new Evaluator(syntaxTree.Root);
-                    int result = eval.Evaluate();
+                var annotatedExpression = annotator.AnnotateExpression(syntaxTree.Root);
+                IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics.Concat(annotator.Diagnostics).ToArray();
+
+                if (!diagnostics.Any()) {
+                    Evaluator eval = new Evaluator(annotatedExpression);
+                    object result = eval.Evaluate();
                     Console.WriteLine(result);
                 } else {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    foreach(var diagnostic in syntaxTree.Diagnostics) {
+                    foreach(var diagnostic in diagnostics) {
                         Console.WriteLine(diagnostic);
                     }
                     Console.ForegroundColor = color;

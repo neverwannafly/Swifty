@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     public sealed class ParanthesisExpressionSyntax: ExpressionSyntax {
         public ParanthesisExpressionSyntax(SyntaxToken leftParanthesis, ExpressionSyntax expr, SyntaxToken rightParanthesis) {
             LeftParanthesisToken = leftParanthesis;

@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
-
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
         private List<string> _diagnostics = new List<string>();
@@ -42,9 +40,18 @@ namespace swifty.Code {
             return new SyntaxTree(_diagnostics ,expression, endofFileToken);
         }
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
-            ExpressionSyntax left = ParsePrimaryExpression();
+            ExpressionSyntax left;
+            int unaryPrec = Current.Kind.GetUnaryOperatorPrecedence();
+            if (unaryPrec!=0 && unaryPrec >= parentPrecedence) {
+                SyntaxToken opToken = NextToken();
+                ExpressionSyntax operand = ParseExpression(unaryPrec);
+                left = new UnaryExpressionSyntax(opToken, operand);
+            } else {
+                left = ParsePrimaryExpression();
+                // Console.WriteLine(left.Kind);
+            }
             while (true) {
-                int precedence = GetBinaryOperatorPrecendence(Current.Kind);
+                int precedence = Current.Kind.GetBinaryOperatorPrecendence();
                 if (precedence == 0 || precedence <= parentPrecedence) break;
                 SyntaxToken operatorToken = NextToken();
                 ExpressionSyntax right = ParseExpression(precedence);
@@ -52,24 +59,25 @@ namespace swifty.Code {
             }
             return left;
         }
-        private static int GetBinaryOperatorPrecendence(SyntaxKind kind) {
-            switch(kind) {
-                case SyntaxKind.PlusToken:      return 1;
-                case SyntaxKind.MinusToken:     return 1;
-                case SyntaxKind.StarToken:      return 2;
-                case SyntaxKind.DivideToken:    return 2;
-                default: return 0;
-            }
-        }
         private ExpressionSyntax ParsePrimaryExpression() {
-            if (Current.Kind == SyntaxKind.LeftParanthesisToken) {
-                SyntaxToken left = NextToken();
-                ExpressionSyntax expression = ParseExpression();
-                SyntaxToken right = MatchToken(SyntaxKind.RightParanthesisToken);
-                return new ParanthesisExpressionSyntax(left, expression, right);
+            switch(Current.Kind) {
+                case SyntaxKind.LeftParanthesisToken : {
+                    SyntaxToken left = NextToken();
+                    ExpressionSyntax expression = ParseExpression();
+                    SyntaxToken right = MatchToken(SyntaxKind.RightParanthesisToken);
+                    return new ParanthesisExpressionSyntax(left, expression, right);
+                }
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword: {
+                    var keywordToken = NextToken();
+                    var value = (keywordToken.Kind == SyntaxKind.TrueKeyword);
+                    return new LiteralExpressionSyntax(keywordToken, value);
+                }
+                default: {
+                    SyntaxToken numberToken = MatchToken(SyntaxKind.NumberToken);
+                    return new LiteralExpressionSyntax(numberToken);
+                }
             }
-            SyntaxToken numberToken = MatchToken(SyntaxKind.NumberToken);
-            return new LiteralExpressionSyntax(numberToken);
         }
     }
 }
