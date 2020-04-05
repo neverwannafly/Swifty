@@ -4,5 +4,7 @@ namespace swifty.Code.Annotation {
         Subtraction,
         Multiplication,
         Division,
+        LogicalOr,
+        LogicalAnd,
     }
 }

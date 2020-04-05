@@ -40,24 +40,37 @@ namespace swifty.Code.Annotation {
             return new AnnotatedLiteralExpression(value);
         }
         public AnnotatedBinaryOperatorKind? AnnotateBinaryOperatorKind(SyntaxKind kind, Type leftType, Type rightType) {
-            if (leftType!=typeof(int) || rightType!=typeof(int)) {
-                return null;
+            if (leftType==typeof(int) && rightType==typeof(int)) {
+                switch(kind) {
+                    case SyntaxKind.PlusToken: return AnnotatedBinaryOperatorKind.Addition;
+                    case SyntaxKind.MinusToken: return AnnotatedBinaryOperatorKind.Subtraction;
+                    case SyntaxKind.StarToken: return AnnotatedBinaryOperatorKind.Multiplication;
+                    case SyntaxKind.DivideToken: return AnnotatedBinaryOperatorKind.Division;
+                }
             }
-            switch(kind) {
-                case SyntaxKind.PlusToken: return AnnotatedBinaryOperatorKind.Addition;
-                case SyntaxKind.MinusToken: return AnnotatedBinaryOperatorKind.Subtraction;
-                case SyntaxKind.StarToken: return AnnotatedBinaryOperatorKind.Multiplication;
-                case SyntaxKind.DivideToken: return AnnotatedBinaryOperatorKind.Division;
-                default: throw new Exception($"Unexpected binary operator {kind}");
+            if (leftType==typeof(bool) && rightType==typeof(bool)) {
+                switch(kind) {
+                    case SyntaxKind.OrToken: return AnnotatedBinaryOperatorKind.LogicalOr;
+                    case SyntaxKind.AndToken: return AnnotatedBinaryOperatorKind.LogicalAnd;
+                }
             }
+            return null;
         }
         public AnnotatedUnaryOperatorKind? AnnotateUnaryOperatorKind(SyntaxKind kind, Type type) {
-            if (type != typeof(int)) return null;
-            switch(kind) {
-                case SyntaxKind.PlusToken: return AnnotatedUnaryOperatorKind.Identity;
-                case SyntaxKind.MinusToken: return AnnotatedUnaryOperatorKind.Negation;
-                default: throw new Exception($"Unexpected unary operator {kind}");
+            if (type == typeof(int)) {
+                switch(kind) {
+                    case SyntaxKind.PlusToken: return AnnotatedUnaryOperatorKind.Identity;
+                    case SyntaxKind.MinusToken: return AnnotatedUnaryOperatorKind.Negation;
+                    default: throw new Exception($"Unexpected unary operator {kind}");
+                }
             }
+            if (type == typeof(bool)) {
+                switch(kind) {
+                    case SyntaxKind.NotToken: return AnnotatedUnaryOperatorKind.LogicalNegation;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -8,11 +8,12 @@ namespace swifty.Code.Syntaxt {
             _text = text;
         }
         public IEnumerable<string> Diagnostics => _diagnostics;
-        private char Current {
-            get {
-                if (_position>=_text.Length) return '\0';
-                return _text[_position];
-            }
+        private char Current => Peek(0);
+        private char LookAhead => Peek(1);
+        private char Peek(int offset) {
+            int index = _position + offset;
+            if (index>=_text.Length) return '\0';
+                return _text[index];
         }
         private void Next() {
             _position++;
@@ -53,6 +54,21 @@ namespace swifty.Code.Syntaxt {
                 case '/':  return new SyntaxToken(SyntaxKind.DivideToken, _position++, "/", null);
                 case '(':  return new SyntaxToken(SyntaxKind.LeftParanthesisToken, _position++, "(", null);
                 case ')':  return new SyntaxToken(SyntaxKind.RightParanthesisToken, _position++, ")", null);
+                case '!': return new SyntaxToken(SyntaxKind.NotToken, _position++, "!", null);
+                case '&': {
+                    if (LookAhead=='&') { 
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.AndToken, _position-2, "&&", null);
+                    }
+                    return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);
+                }
+                case '|': {
+                    if (LookAhead=='|') { 
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.OrToken, _position-2, "||", null);
+                    }
+                    return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);
+                }
                 default: {  
                     _diagnostics.Add($"ERROR: Bad character input : '{Current}'");
                     return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);

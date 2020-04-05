@@ -15,27 +15,30 @@ namespace swifty.Code {
                 return n.Value;
             }
             if (root is AnnotatedUnaryExpression u) {
-                int operand = (int)EvaluateExpression(u.Operand);
+                object operand = EvaluateExpression(u.Operand);
                 switch (u.OperatorKind) {
-                    case AnnotatedUnaryOperatorKind.Identity: return operand;
-                    case AnnotatedUnaryOperatorKind.Negation: return -operand;
+                    case AnnotatedUnaryOperatorKind.Identity: return (int)operand;
+                    case AnnotatedUnaryOperatorKind.Negation: return -(int)operand;
+                    case AnnotatedUnaryOperatorKind.LogicalNegation: return !(bool)operand;
                     default: throw new Exception($"Unexpected Unary expression {u.OperatorKind}");
                 }
             }
             if (root is AnnotatedBinaryExpression b) {
-                int left = (int)EvaluateExpression(b.Left);
-                int right = (int)EvaluateExpression(b.Right);
+                object left = EvaluateExpression(b.Left);
+                object right = EvaluateExpression(b.Right);
 
                 switch(b.OperatorKind) {
-                    case AnnotatedBinaryOperatorKind.Addition: return left + right;
-                    case AnnotatedBinaryOperatorKind.Subtraction: return left - right;
-                    case AnnotatedBinaryOperatorKind.Multiplication: return left * right;
+                    case AnnotatedBinaryOperatorKind.Addition: return (int)left + (int)right;
+                    case AnnotatedBinaryOperatorKind.Subtraction: return (int)left - (int)right;
+                    case AnnotatedBinaryOperatorKind.Multiplication: return (int)left * (int)right;
                     case AnnotatedBinaryOperatorKind.Division: {
-                        if (right == 0) {
+                        if ((int)right == 0) {
                             throw new Exception("ERROR: Division by Zero");
                         }
-                        return left / right;
+                        return (int)left / (int)right;
                     }
+                    case AnnotatedBinaryOperatorKind.LogicalAnd : return (bool)left && (bool)right;
+                    case AnnotatedBinaryOperatorKind.LogicalOr: return (bool)left || (bool)right;
                     default: throw new Exception($"Unexpected binary operator {b.OperatorKind}");
                 }
             }
