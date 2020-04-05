@@ -10,7 +10,7 @@ namespace swifty.Code.Syntaxt {
         RightParanthesisToken,
         EndofFileToken,
         BadToken,
-        NumberExpression,
+        LiteralExpression,
         BinaryExpression,
         ParathesisExpression,
         UnaryExpression,

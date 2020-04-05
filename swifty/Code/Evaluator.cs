@@ -1,40 +1,43 @@
 using System;
 using swifty.Code.Syntaxt;
+using swifty.Code.Annotation;
 namespace swifty.Code {
-    class Evaluator {
-        private readonly ExpressionSyntax _root;
-        public Evaluator(ExpressionSyntax root) {
+    internal class Evaluator {
+        private readonly AnnotatedExpression _root;
+        public Evaluator(AnnotatedExpression root) {
             _root = root;
         }
         public int Evaluate() {
             return EvaluateExpression(_root);
         }
-        private int EvaluateExpression(ExpressionSyntax root) {
-            if (root is LiteralExpressionSyntax n) {
-                return (int)n.LiteralToken.Value;
+        private int EvaluateExpression(AnnotatedExpression root) {
+            if (root is AnnotatedLiteralExpression n) {
+                return (int)n.Value;
             }
-            if (root is UnaryExpressionSyntax u) {
+            if (root is AnnotatedUnaryExpression u) {
                 int operand = EvaluateExpression(u.Operand);
-                switch (u.OperatorToken.Kind) {
-                    case SyntaxKind.PlusToken: return operand;
-                    case SyntaxKind.MinusToken: return -operand;
-                    default: throw new Exception($"Unexpected Unary expression {u.OperatorToken.Kind}");
+                switch (u.OperatorKind) {
+                    case AnnotatedUnaryOperatorKind.Identity: return operand;
+                    case AnnotatedUnaryOperatorKind.Negation: return -operand;
+                    default: throw new Exception($"Unexpected Unary expression {u.OperatorKind}");
                 }
             }
-            if (root is BinaryExpressionSyntax b) {
+            if (root is AnnotatedBinaryExpression b) {
                 int left = EvaluateExpression(b.Left);
                 int right = EvaluateExpression(b.Right);
 
-                switch(b.OperatorToken.Kind) {
-                    case SyntaxKind.PlusToken: return left + right;
-                    case SyntaxKind.MinusToken: return left - right;
-                    case SyntaxKind.StarToken: return left * right;
-                    case SyntaxKind.DivideToken: return left / right;
-                    default: throw new Exception($"Unexpected binary operator {b.OperatorToken.Kind}");
+                switch(b.OperatorKind) {
+                    case AnnotatedBinaryOperatorKind.Addition: return left + right;
+                    case AnnotatedBinaryOperatorKind.Subtraction: return left - right;
+                    case AnnotatedBinaryOperatorKind.Multiplication: return left * right;
+                    case AnnotatedBinaryOperatorKind.Division: {
+                        if (right == 0) {
+                            throw new Exception("ERROR: Division by Zero");
+                        }
+                        return left / right;
+                    }
+                    default: throw new Exception($"Unexpected binary operator {b.OperatorKind}");
                 }
-            }
-            if (root is ParanthesisExpressionSyntax p) {
-                return EvaluateExpression(p.Expression);
             }
             throw new Exception($"Unexpected node {root.Kind}");
         }
