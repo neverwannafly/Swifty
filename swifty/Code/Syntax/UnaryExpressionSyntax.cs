@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     public sealed class UnaryExpressionSyntax : ExpressionSyntax {
         public UnaryExpressionSyntax(SyntaxToken operatorToken, ExpressionSyntax operand) {
             OperatorToken = operatorToken;

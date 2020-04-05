@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     public sealed class LiteralExpressionSyntax : ExpressionSyntax {
         public LiteralExpressionSyntax(SyntaxToken literalToken) {
             LiteralToken = literalToken;

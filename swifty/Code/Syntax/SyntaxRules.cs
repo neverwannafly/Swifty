@@ -1,4 +1,4 @@
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     internal static class SyntaxRules {
         internal static int GetBinaryOperatorPrecendence(this SyntaxKind kind) {
             switch(kind) {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     internal sealed class Lexer {
         private readonly string _text;
         private int _position;

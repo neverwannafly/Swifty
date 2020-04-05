@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     public sealed class BinaryExpressionSyntax : ExpressionSyntax {
         public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right) {
             Left = left;

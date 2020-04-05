@@ -1,4 +1,4 @@
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     public enum SyntaxKind {
         NumberToken,
         WhitespaceToken,

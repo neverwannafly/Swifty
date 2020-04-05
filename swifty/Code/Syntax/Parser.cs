@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace swifty.Code {
+namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
         private List<string> _diagnostics = new List<string>();
