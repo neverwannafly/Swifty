@@ -1,5 +1,6 @@
 namespace swifty.Code.Syntaxt {
     public enum SyntaxKind {
+        // Tokens
         NumberToken,
         WhitespaceToken,
         PlusToken,
@@ -9,7 +10,12 @@ namespace swifty.Code.Syntaxt {
         LeftParanthesisToken,
         RightParanthesisToken,
         EndofFileToken,
+        IdentifierToken,
         BadToken,
+        // Keywords
+        TrueKeyword,
+        FalseKeyword,
+        // Expressions
         LiteralExpression,
         BinaryExpression,
         ParathesisExpression,

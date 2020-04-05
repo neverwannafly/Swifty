@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-
 namespace swifty.Code.Syntaxt {
     internal sealed class Lexer {
         private readonly string _text;
@@ -38,6 +37,14 @@ namespace swifty.Code.Syntaxt {
                 int len = _position - start;
                 string text = _text.Substring(start, len);
                 return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
+            }
+            if (char.IsLetter(Current)) {
+                int start = _position;
+                while (char.IsLetter(Current)) Next();
+                int len = _position - start;
+                string text = _text.Substring(start, len);
+                var kind = SyntaxRules.GetKeywordKind(text);
+                return new SyntaxToken(kind, start, text, null);
             }
             switch(Current) {
                 case '+':  return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);

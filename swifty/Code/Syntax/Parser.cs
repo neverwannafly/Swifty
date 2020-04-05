@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-
 namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
@@ -49,6 +48,7 @@ namespace swifty.Code.Syntaxt {
                 left = new UnaryExpressionSyntax(opToken, operand);
             } else {
                 left = ParsePrimaryExpression();
+                // Console.WriteLine(left.Kind);
             }
             while (true) {
                 int precedence = Current.Kind.GetBinaryOperatorPrecendence();
@@ -60,14 +60,24 @@ namespace swifty.Code.Syntaxt {
             return left;
         }
         private ExpressionSyntax ParsePrimaryExpression() {
-            if (Current.Kind == SyntaxKind.LeftParanthesisToken) {
-                SyntaxToken left = NextToken();
-                ExpressionSyntax expression = ParseExpression();
-                SyntaxToken right = MatchToken(SyntaxKind.RightParanthesisToken);
-                return new ParanthesisExpressionSyntax(left, expression, right);
+            switch(Current.Kind) {
+                case SyntaxKind.LeftParanthesisToken : {
+                    SyntaxToken left = NextToken();
+                    ExpressionSyntax expression = ParseExpression();
+                    SyntaxToken right = MatchToken(SyntaxKind.RightParanthesisToken);
+                    return new ParanthesisExpressionSyntax(left, expression, right);
+                }
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword: {
+                    var keywordToken = NextToken();
+                    var value = (Current.Kind == SyntaxKind.TrueKeyword);
+                    return new LiteralExpressionSyntax(keywordToken, value);
+                }
+                default: {
+                    SyntaxToken numberToken = MatchToken(SyntaxKind.NumberToken);
+                    return new LiteralExpressionSyntax(numberToken);
+                }
             }
-            SyntaxToken numberToken = MatchToken(SyntaxKind.NumberToken);
-            return new LiteralExpressionSyntax(numberToken);
         }
     }
 }

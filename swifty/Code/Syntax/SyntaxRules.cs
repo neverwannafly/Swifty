@@ -16,5 +16,13 @@ namespace swifty.Code.Syntaxt {
                 default: return 0;
             }
         }
+
+        internal static SyntaxKind GetKeywordKind(string text) {
+            switch(text) {
+                case "true": return SyntaxKind.TrueKeyword;
+                case "false": return SyntaxKind.FalseKeyword;
+                default: return SyntaxKind.IdentifierToken;
+            }
+        }
     }
 }

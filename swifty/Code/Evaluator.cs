@@ -7,15 +7,15 @@ namespace swifty.Code {
         public Evaluator(AnnotatedExpression root) {
             _root = root;
         }
-        public int Evaluate() {
+        public object Evaluate() {
             return EvaluateExpression(_root);
         }
-        private int EvaluateExpression(AnnotatedExpression root) {
+        private object EvaluateExpression(AnnotatedExpression root) {
             if (root is AnnotatedLiteralExpression n) {
-                return (int)n.Value;
+                return n.Value;
             }
             if (root is AnnotatedUnaryExpression u) {
-                int operand = EvaluateExpression(u.Operand);
+                int operand = (int)EvaluateExpression(u.Operand);
                 switch (u.OperatorKind) {
                     case AnnotatedUnaryOperatorKind.Identity: return operand;
                     case AnnotatedUnaryOperatorKind.Negation: return -operand;
@@ -23,8 +23,8 @@ namespace swifty.Code {
                 }
             }
             if (root is AnnotatedBinaryExpression b) {
-                int left = EvaluateExpression(b.Left);
-                int right = EvaluateExpression(b.Right);
+                int left = (int)EvaluateExpression(b.Left);
+                int right = (int)EvaluateExpression(b.Right);
 
                 switch(b.OperatorKind) {
                     case AnnotatedBinaryOperatorKind.Addition: return left + right;

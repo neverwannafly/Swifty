@@ -15,17 +15,18 @@ namespace swifty {
 
                 var syntaxTree = SyntaxTree.Parse(line);
                 var annotator = new Annotator();
-                var annotatedExpression = annotator.AnnotateExpression(syntaxTree.Root);
-                IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics.Concat(annotator.Diagnostics).ToArray();
 
                 var color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 print(syntaxTree.Root);
                 Console.ForegroundColor = color;
 
+                var annotatedExpression = annotator.AnnotateExpression(syntaxTree.Root);
+                IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics.Concat(annotator.Diagnostics).ToArray();
+
                 if (!diagnostics.Any()) {
                     Evaluator eval = new Evaluator(annotatedExpression);
-                    int result = eval.Evaluate();
+                    object result = eval.Evaluate();
                     Console.WriteLine(result);
                 } else {
                     Console.ForegroundColor = ConsoleColor.DarkRed;

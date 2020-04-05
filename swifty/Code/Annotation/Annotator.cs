@@ -20,6 +20,7 @@ namespace swifty.Code.Annotation {
             var annotateOperatorKind = AnnotateBinaryOperatorKind(syntax.OperatorToken.Kind, annotateLeft.Type, annotateRight.Type);
             if (annotateOperatorKind==null) {
                 _diagnostics.Add($"Binary operator '{syntax.OperatorToken.Text}' isnt defined for types {annotateLeft.Type} and {annotateRight.Type}");
+                return annotateRight;
             }
             // .Value return value of a nullable class
             return new AnnotatedBinaryExpression(annotateLeft, annotateOperatorKind.Value, annotateRight);
@@ -35,7 +36,7 @@ namespace swifty.Code.Annotation {
             return new AnnotatedUnaryExpression(annotateOperatorKind.Value, annotateOperand);
         }
         public AnnotatedExpression AnnotateLiteralExpression(LiteralExpressionSyntax syntax) {
-            var value = syntax.LiteralToken.Value as int? ?? 0;
+            var value = syntax.Value ?? 0;
             return new AnnotatedLiteralExpression(value);
         }
         public AnnotatedBinaryOperatorKind? AnnotateBinaryOperatorKind(SyntaxKind kind, Type leftType, Type rightType) {
