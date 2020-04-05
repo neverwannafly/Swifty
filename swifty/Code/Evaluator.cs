@@ -13,9 +13,17 @@ namespace swifty.Code {
             if (root is LiteralExpressionSyntax n) {
                 return (int)n.LiteralToken.Value;
             }
+            if (root is UnaryExpressionSyntax u) {
+                int operand = EvaluateExpression(u.Operand);
+                switch (u.OperatorToken.Kind) {
+                    case SyntaxKind.PlusToken: return operand;
+                    case SyntaxKind.MinusToken: return -operand;
+                    default: throw new Exception($"Unexpected Unary expression {u.OperatorToken.Kind}");
+                }
+            }
             if (root is BinaryExpressionSyntax b) {
-                var left = EvaluateExpression(b.Left);
-                var right = EvaluateExpression(b.Right);
+                int left = EvaluateExpression(b.Left);
+                int right = EvaluateExpression(b.Right);
 
                 switch(b.OperatorToken.Kind) {
                     case SyntaxKind.PlusToken: return left + right;

@@ -13,5 +13,6 @@ namespace swifty.Code {
         NumberExpression,
         BinaryExpression,
         ParathesisExpression,
+        UnaryExpression,
     }
 }

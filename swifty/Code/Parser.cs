@@ -41,7 +41,15 @@ namespace swifty.Code {
             return new SyntaxTree(_diagnostics ,expression, endofFileToken);
         }
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
-            ExpressionSyntax left = ParsePrimaryExpression();
+            ExpressionSyntax left;
+            int unaryPrec = Current.Kind.GetUnaryOperatorPrecedence();
+            if (unaryPrec!=0 && unaryPrec >= parentPrecedence) {
+                SyntaxToken opToken = NextToken();
+                ExpressionSyntax operand = ParseExpression(unaryPrec);
+                left = new UnaryExpressionSyntax(opToken, operand);
+            } else {
+                left = ParsePrimaryExpression();
+            }
             while (true) {
                 int precedence = Current.Kind.GetBinaryOperatorPrecendence();
                 if (precedence == 0 || precedence <= parentPrecedence) break;
