@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace swifty.Code {
@@ -44,22 +43,13 @@ namespace swifty.Code {
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
             ExpressionSyntax left = ParsePrimaryExpression();
             while (true) {
-                int precedence = GetBinaryOperatorPrecendence(Current.Kind);
+                int precedence = Current.Kind.GetBinaryOperatorPrecendence();
                 if (precedence == 0 || precedence <= parentPrecedence) break;
                 SyntaxToken operatorToken = NextToken();
                 ExpressionSyntax right = ParseExpression(precedence);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
             return left;
-        }
-        private static int GetBinaryOperatorPrecendence(SyntaxKind kind) {
-            switch(kind) {
-                case SyntaxKind.PlusToken:      return 1;
-                case SyntaxKind.MinusToken:     return 1;
-                case SyntaxKind.StarToken:      return 2;
-                case SyntaxKind.DivideToken:    return 2;
-                default: return 0;
-            }
         }
         private ExpressionSyntax ParsePrimaryExpression() {
             if (Current.Kind == SyntaxKind.LeftParanthesisToken) {
