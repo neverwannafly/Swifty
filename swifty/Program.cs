@@ -9,15 +9,14 @@ namespace swifty {
     internal static class Program {
         private static void Main() {
             while (true) {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.Write("> ");
                 string line = Console.ReadLine();
 
                 var syntaxTree = SyntaxTree.Parse(line);
 
-                var color = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.ForegroundColor = ConsoleColor.Magenta;
                 print(syntaxTree.Root);
-                Console.ForegroundColor = color;
 
                 var compiler = new Compiler(syntaxTree);
                 var result = compiler.EvaluationResult();
@@ -26,13 +25,13 @@ namespace swifty {
                 var diagnostics = result.Diagnostics;
 
                 if (!diagnostics.Any()) {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(value);
                 } else {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     foreach(var diagnostic in diagnostics) {
                         Console.WriteLine(diagnostic);
                     }
-                    Console.ForegroundColor = color;
                 }
             }
         }
