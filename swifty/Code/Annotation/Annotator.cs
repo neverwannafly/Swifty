@@ -11,6 +11,7 @@ namespace swifty.Code.Annotation {
                 case SyntaxKind.BinaryExpression: return AnnotateBinaryExpression((BinaryExpressionSyntax)syntax);
                 case SyntaxKind.UnaryExpression: return AnnotateUnaryExpression((UnaryExpressionSyntax)syntax);
                 case SyntaxKind.LiteralExpression: return AnnotateLiteralExpression((LiteralExpressionSyntax)syntax);
+                case SyntaxKind.ParathesisExpression: return AnnotateExpression(((ParanthesisExpressionSyntax)syntax).Expression);
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
         }
