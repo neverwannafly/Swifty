@@ -1,15 +1,16 @@
 using System;
 namespace swifty.Code.Annotation {
+
     internal sealed class AnnotatedBinaryExpression : AnnotatedExpression {
-        public AnnotatedBinaryExpression(AnnotatedExpression left,AnnotatedBinaryOperatorKind operatorKind, AnnotatedExpression right) {
+        public AnnotatedBinaryExpression(AnnotatedExpression left,AnnotatedBinaryOperator op, AnnotatedExpression right) {
             Left = left;
-            OperatorKind = operatorKind;
+            Operator = op;
             Right = right;
         }
         public override AnnotatedKind Kind => AnnotatedKind.BinaryExpression;
         public override Type Type => Left.Type;
         public AnnotatedExpression Left {get;}
-        public AnnotatedBinaryOperatorKind OperatorKind {get;}
+        public AnnotatedBinaryOperator Operator {get;}
         public AnnotatedExpression Right {get;}
     }
 }

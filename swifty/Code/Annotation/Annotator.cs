@@ -17,59 +17,25 @@ namespace swifty.Code.Annotation {
         public AnnotatedExpression AnnotateBinaryExpression(BinaryExpressionSyntax syntax) {
             var annotateLeft = AnnotateExpression(syntax.Left);
             var annotateRight = AnnotateExpression(syntax.Right);
-            var annotateOperatorKind = AnnotateBinaryOperatorKind(syntax.OperatorToken.Kind, annotateLeft.Type, annotateRight.Type);
+            var annotateOperatorKind = AnnotatedBinaryOperator.Annotate(syntax.OperatorToken.Kind, annotateLeft.Type, annotateRight.Type);
             if (annotateOperatorKind==null) {
                 _diagnostics.Add($"Binary operator '{syntax.OperatorToken.Text}' isnt defined for types {annotateLeft.Type} and {annotateRight.Type}");
                 return annotateRight;
             }
-            // .Value return value of a nullable class
-            return new AnnotatedBinaryExpression(annotateLeft, annotateOperatorKind.Value, annotateRight);
+            return new AnnotatedBinaryExpression(annotateLeft, annotateOperatorKind, annotateRight);
         }
         public AnnotatedExpression AnnotateUnaryExpression(UnaryExpressionSyntax syntax) {
             var annotateOperand = AnnotateExpression(syntax.Operand);
-            var annotateOperatorKind = AnnotateUnaryOperatorKind(syntax.OperatorToken.Kind, annotateOperand.Type);
+            var annotateOperatorKind = AnnotatedUnaryOperator.Annotate(syntax.OperatorToken.Kind, annotateOperand.Type);
             if (annotateOperatorKind==null) {
                 _diagnostics.Add($"Unary operator '{syntax.OperatorToken.Text}' isnt defined for type {annotateOperand.Type}");
                 return annotateOperand;
             }
-            // .Value return value of a nullable class
-            return new AnnotatedUnaryExpression(annotateOperatorKind.Value, annotateOperand);
+            return new AnnotatedUnaryExpression(annotateOperatorKind, annotateOperand);
         }
         public AnnotatedExpression AnnotateLiteralExpression(LiteralExpressionSyntax syntax) {
             var value = syntax.Value ?? 0;
             return new AnnotatedLiteralExpression(value);
-        }
-        public AnnotatedBinaryOperatorKind? AnnotateBinaryOperatorKind(SyntaxKind kind, Type leftType, Type rightType) {
-            if (leftType==typeof(int) && rightType==typeof(int)) {
-                switch(kind) {
-                    case SyntaxKind.PlusToken: return AnnotatedBinaryOperatorKind.Addition;
-                    case SyntaxKind.MinusToken: return AnnotatedBinaryOperatorKind.Subtraction;
-                    case SyntaxKind.StarToken: return AnnotatedBinaryOperatorKind.Multiplication;
-                    case SyntaxKind.DivideToken: return AnnotatedBinaryOperatorKind.Division;
-                }
-            }
-            if (leftType==typeof(bool) && rightType==typeof(bool)) {
-                switch(kind) {
-                    case SyntaxKind.OrToken: return AnnotatedBinaryOperatorKind.LogicalOr;
-                    case SyntaxKind.AndToken: return AnnotatedBinaryOperatorKind.LogicalAnd;
-                }
-            }
-            return null;
-        }
-        public AnnotatedUnaryOperatorKind? AnnotateUnaryOperatorKind(SyntaxKind kind, Type type) {
-            if (type == typeof(int)) {
-                switch(kind) {
-                    case SyntaxKind.PlusToken: return AnnotatedUnaryOperatorKind.Identity;
-                    case SyntaxKind.MinusToken: return AnnotatedUnaryOperatorKind.Negation;
-                }
-            }
-            if (type == typeof(bool)) {
-                switch(kind) {
-                    case SyntaxKind.NotToken: return AnnotatedUnaryOperatorKind.LogicalNegation;
-                }
-            }
-
-            return null;
         }
     }
 }

@@ -16,18 +16,18 @@ namespace swifty.Code {
             }
             if (root is AnnotatedUnaryExpression u) {
                 object operand = EvaluateExpression(u.Operand);
-                switch (u.OperatorKind) {
+                switch (u.Operator.Kind) {
                     case AnnotatedUnaryOperatorKind.Identity: return (int)operand;
                     case AnnotatedUnaryOperatorKind.Negation: return -(int)operand;
                     case AnnotatedUnaryOperatorKind.LogicalNegation: return !(bool)operand;
-                    default: throw new Exception($"Unexpected Unary expression {u.OperatorKind}");
+                    default: throw new Exception($"Unexpected Unary expression {u.Operator.Kind}");
                 }
             }
             if (root is AnnotatedBinaryExpression b) {
                 object left = EvaluateExpression(b.Left);
                 object right = EvaluateExpression(b.Right);
 
-                switch(b.OperatorKind) {
+                switch(b.Operator.Kind) {
                     case AnnotatedBinaryOperatorKind.Addition: return (int)left + (int)right;
                     case AnnotatedBinaryOperatorKind.Subtraction: return (int)left - (int)right;
                     case AnnotatedBinaryOperatorKind.Multiplication: return (int)left * (int)right;
@@ -39,7 +39,7 @@ namespace swifty.Code {
                     }
                     case AnnotatedBinaryOperatorKind.LogicalAnd : return (bool)left && (bool)right;
                     case AnnotatedBinaryOperatorKind.LogicalOr: return (bool)left || (bool)right;
-                    default: throw new Exception($"Unexpected binary operator {b.OperatorKind}");
+                    default: throw new Exception($"Unexpected binary operator {b.Operator.Kind}");
                 }
             }
             throw new Exception($"Unexpected node {root.Kind}");
