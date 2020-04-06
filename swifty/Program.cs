@@ -16,7 +16,7 @@ namespace swifty {
                 var syntaxTree = SyntaxTree.Parse(line);
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                print(syntaxTree.Root);
+                drawTree(syntaxTree.Root);
 
                 var compiler = new Compiler(syntaxTree);
                 var result = compiler.EvaluationResult();
@@ -28,14 +28,27 @@ namespace swifty {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(value);
                 } else {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     foreach(var diagnostic in diagnostics) {
-                        Console.WriteLine(diagnostic);
+                        printDiagnostics(line, diagnostic);
                     }
                 }
             }
         }
-        static void print(SyntaxNode node, string indent="", bool isLast=true) {
+        static void printDiagnostics(string line, Diagnostic diagnostic) {
+            Console.WriteLine();
+            var prefix = line.Substring(0, diagnostic.Span.Start);
+            var error = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
+            var suffix = line.Substring(diagnostic.Span.End);
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write($"\t{prefix}");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write(error);
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine(suffix);
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine(diagnostic);
+        }
+        static void drawTree(SyntaxNode node, string indent="", bool isLast=true) {
             var marker = isLast? "└──" : "├──";
             Console.Write(indent);
             Console.Write(marker);
@@ -47,7 +60,7 @@ namespace swifty {
             Console.WriteLine();
             var lastChild = node.GetChildren().LastOrDefault();
             foreach (var child in node.GetChildren()) {
-                print(child, indent, child==lastChild);
+                drawTree(child, indent, child==lastChild);
             }
         }
     }
