@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace swifty.Code.Annotation {    
     sealed class Annotator {
-        private readonly List<string> _diagnostics = new List<string>();
-        public IEnumerable<string> Diagnostics => _diagnostics;
+        private readonly DiagnosisHandler _diagnostics = new DiagnosisHandler();
+        public DiagnosisHandler Diagnostics => _diagnostics;
         public AnnotatedExpression AnnotateExpression(ExpressionSyntax syntax) {
             switch(syntax.Kind) {
                 case SyntaxKind.BinaryExpression: return AnnotateBinaryExpression((BinaryExpressionSyntax)syntax);
@@ -20,7 +20,7 @@ namespace swifty.Code.Annotation {
             var annotateRight = AnnotateExpression(syntax.Right);
             var annotateOperatorKind = AnnotatedBinaryOperator.Annotate(syntax.OperatorToken.Kind, annotateLeft.Type, annotateRight.Type);
             if (annotateOperatorKind==null) {
-                _diagnostics.Add($"Binary operator '{syntax.OperatorToken.Text}' isnt defined for types {annotateLeft.Type} and {annotateRight.Type}");
+                _diagnostics.ReportUndefinedBinaryOperator(syntax.OperatorToken.Span, annotateLeft.Type,syntax.OperatorToken.Text, annotateRight.Type);
                 return annotateRight;
             }
             return new AnnotatedBinaryExpression(annotateLeft, annotateOperatorKind, annotateRight);
@@ -29,7 +29,7 @@ namespace swifty.Code.Annotation {
             var annotateOperand = AnnotateExpression(syntax.Operand);
             var annotateOperatorKind = AnnotatedUnaryOperator.Annotate(syntax.OperatorToken.Kind, annotateOperand.Type);
             if (annotateOperatorKind==null) {
-                _diagnostics.Add($"Unary operator '{syntax.OperatorToken.Text}' isnt defined for type {annotateOperand.Type}");
+                _diagnostics.ReportUndefinedUnaryOperator(syntax.OperatorToken.Span, syntax.OperatorToken.Text, annotateOperand.Type);
                 return annotateOperand;
             }
             return new AnnotatedUnaryExpression(annotateOperatorKind, annotateOperand);

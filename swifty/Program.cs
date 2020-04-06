@@ -23,7 +23,7 @@ namespace swifty {
                 var result = compiler.EvaluationResult();
 
                 object value = result.Value;
-                IReadOnlyList<string> diagnostics = result.Diagnostics;
+                var diagnostics = result.Diagnostics;
 
                 if (!diagnostics.Any()) {
                     Console.WriteLine(value);

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
-        private List<string> _diagnostics = new List<string>();
+        private DiagnosisHandler _diagnostics = new DiagnosisHandler();
         private int _position;
         public Parser(string text) {
             Lexer lexer = new Lexer(text);
@@ -17,7 +17,7 @@ namespace swifty.Code.Syntaxt {
             _tokens = tokens.ToArray();
             _diagnostics.AddRange(lexer.Diagnostics);
         }
-        public IEnumerable<string> Diagnostics => _diagnostics;
+        public DiagnosisHandler Diagnostics => _diagnostics;
         private SyntaxToken Peek(int offset) {
             int index = _position + offset;
             if (index >= _tokens.Length) return _tokens[_tokens.Length-1];
@@ -31,7 +31,7 @@ namespace swifty.Code.Syntaxt {
         }
         private SyntaxToken MatchToken(SyntaxKind kind) {
             if (Current.Kind == kind) return NextToken();
-            _diagnostics.Add($"ERROR: Unexpected token <{Current.Kind}>, expected <{kind}>");
+            _diagnostics.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
             return new SyntaxToken(kind, Current.Position, null, null);
         }
         public SyntaxTree Parse() {

@@ -12,13 +12,13 @@ namespace swifty.Code {
         public EvaluationResult EvaluationResult() {
             var annotator = new Annotator();
             var annotatedExpression = annotator.AnnotateExpression(Syntax.Root);
-            var diagnostics = Syntax.Diagnostics.Concat(annotator.Diagnostics).ToArray();
+            var diagnostics = Syntax.Diagnostics.Concat(annotator.Diagnostics);
             if (diagnostics.Any()) {
                 return new EvaluationResult(diagnostics, null);
             }
             var evaluator = new Evaluator(annotatedExpression);
             var value = evaluator.Evaluate();
-            return new EvaluationResult(Array.Empty<string>(), value);
+            return new EvaluationResult(Array.Empty<Diagnostic>(), value);
         }
     }
 }
