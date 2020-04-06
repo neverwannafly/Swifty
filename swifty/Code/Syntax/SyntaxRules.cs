@@ -13,6 +13,8 @@ namespace swifty.Code.Syntaxt {
         }
         internal static int GetUnaryOperatorPrecedence(this SyntaxKind kind) {
             switch(kind) {
+                case SyntaxKind.NotToken:
+                return 9;
                 case SyntaxKind.AndToken:       return 8;
                 case SyntaxKind.OrToken:        return 7;
                 case SyntaxKind.PlusToken:      return 6;
