@@ -28,5 +28,6 @@ namespace swifty.Code.Syntaxt {
         ParathesisExpression,
         UnaryExpression,
         NameExpression,
+        AssignmentExpression,
     }
 }
