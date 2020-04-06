@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 using swifty.Code;
 using swifty.Code.Syntaxt;
-using swifty.Code.Annotation;
 
 namespace swifty {
     internal static class Program {
