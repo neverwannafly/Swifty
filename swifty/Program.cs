@@ -14,20 +14,20 @@ namespace swifty {
                 string line = Console.ReadLine();
 
                 var syntaxTree = SyntaxTree.Parse(line);
-                var annotator = new Annotator();
 
                 var color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 print(syntaxTree.Root);
                 Console.ForegroundColor = color;
 
-                var annotatedExpression = annotator.AnnotateExpression(syntaxTree.Root);
-                IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics.Concat(annotator.Diagnostics).ToArray();
+                var compiler = new Compiler(syntaxTree);
+                var result = compiler.EvaluationResult();
+
+                object value = result.Value;
+                IReadOnlyList<string> diagnostics = result.Diagnostics;
 
                 if (!diagnostics.Any()) {
-                    Evaluator eval = new Evaluator(annotatedExpression);
-                    object result = eval.Evaluate();
-                    Console.WriteLine(result);
+                    Console.WriteLine(value);
                 } else {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     foreach(var diagnostic in diagnostics) {
