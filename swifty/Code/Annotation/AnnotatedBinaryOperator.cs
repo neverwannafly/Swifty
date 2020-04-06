@@ -21,6 +21,10 @@ namespace swifty.Code.Annotation {
             new AnnotatedBinaryOperator(SyntaxKind.MinusToken, AnnotatedBinaryOperatorKind.Subtraction, typeof(int)),
             new AnnotatedBinaryOperator(SyntaxKind.StarToken, AnnotatedBinaryOperatorKind.Multiplication, typeof(int)),
             new AnnotatedBinaryOperator(SyntaxKind.DivideToken, AnnotatedBinaryOperatorKind.Division, typeof(int)),
+            new AnnotatedBinaryOperator(SyntaxKind.EqualToken, AnnotatedBinaryOperatorKind.Equality, typeof(int), typeof(int), typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.NotEqualToken, AnnotatedBinaryOperatorKind.Inequality, typeof(int), typeof(int), typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.EqualToken, AnnotatedBinaryOperatorKind.Equality, typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.NotEqualToken, AnnotatedBinaryOperatorKind.Inequality, typeof(bool)),
             new AnnotatedBinaryOperator(SyntaxKind.AndToken, AnnotatedBinaryOperatorKind.LogicalAnd, typeof(bool)),
             new AnnotatedBinaryOperator(SyntaxKind.OrToken, AnnotatedBinaryOperatorKind.LogicalOr, typeof(bool)),
         };

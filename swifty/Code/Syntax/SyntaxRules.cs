@@ -3,9 +3,11 @@ namespace swifty.Code.Syntaxt {
         internal static int GetBinaryOperatorPrecendence(this SyntaxKind kind) {
             switch(kind) {
                 case SyntaxKind.DivideToken:    return 5;
-                case SyntaxKind.StarToken:      return 4;
-                case SyntaxKind.PlusToken:      return 3;
-                case SyntaxKind.MinusToken:     return 3;
+                case SyntaxKind.StarToken:      return 5;
+                case SyntaxKind.PlusToken:      return 4;
+                case SyntaxKind.MinusToken:     return 4;
+                case SyntaxKind.EqualToken:     return 3;
+                case SyntaxKind.NotEqualToken:  return 3;
                 case SyntaxKind.AndToken:       return 2;
                 case SyntaxKind.OrToken:        return 1;
                 default:                        return 0;

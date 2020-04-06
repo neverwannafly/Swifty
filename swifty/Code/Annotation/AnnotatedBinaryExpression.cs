@@ -8,7 +8,7 @@ namespace swifty.Code.Annotation {
             Right = right;
         }
         public override AnnotatedKind Kind => AnnotatedKind.BinaryExpression;
-        public override Type Type => Left.Type;
+        public override Type Type => Operator.ResultType;
         public AnnotatedExpression Left {get;}
         public AnnotatedBinaryOperator Operator {get;}
         public AnnotatedExpression Right {get;}

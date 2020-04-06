@@ -7,6 +7,8 @@ namespace swifty.Code.Syntaxt {
         MinusToken,
         StarToken,
         DivideToken,
+        EqualToken,
+        NotEqualToken,
         NotToken,
         AndToken,
         OrToken,

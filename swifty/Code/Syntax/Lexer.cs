@@ -54,26 +54,36 @@ namespace swifty.Code.Syntaxt {
                 case '/':  return new SyntaxToken(SyntaxKind.DivideToken, _position++, "/", null);
                 case '(':  return new SyntaxToken(SyntaxKind.LeftParanthesisToken, _position++, "(", null);
                 case ')':  return new SyntaxToken(SyntaxKind.RightParanthesisToken, _position++, ")", null);
-                case '!': return new SyntaxToken(SyntaxKind.NotToken, _position++, "!", null);
+                case '!': { 
+                    if (LookAhead=='=') {
+                        return new SyntaxToken(SyntaxKind.NotEqualToken, _position-2, "!=", null);
+                    }
+                    return new SyntaxToken(SyntaxKind.NotToken, _position++, "!", null); 
+                }
                 case '&': {
                     if (LookAhead=='&') { 
                         _position += 2;
                         return new SyntaxToken(SyntaxKind.AndToken, _position-2, "&&", null);
                     }
-                    return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);
+                    break;
                 }
                 case '|': {
                     if (LookAhead=='|') { 
                         _position += 2;
                         return new SyntaxToken(SyntaxKind.OrToken, _position-2, "||", null);
                     }
-                    return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);
+                    break;
                 }
-                default: {  
-                    _diagnostics.Add($"ERROR: Bad character input : '{Current}'");
-                    return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);
+                case '=' : {
+                    if (LookAhead=='=') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.EqualToken, _position-2, "==", null);
+                    }
+                    break;
                 }
             }
+            _diagnostics.Add($"ERROR: Bad character input : '{Current}'");
+            return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);
         }
     }
 }

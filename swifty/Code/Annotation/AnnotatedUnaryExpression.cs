@@ -7,7 +7,7 @@ namespace swifty.Code.Annotation {
             Operand = operand;
         }
         public override AnnotatedKind Kind => AnnotatedKind.UnaryExpression;
-        public override Type Type => Operand.Type;
+        public override Type Type => Operator.ResultType;
         public AnnotatedUnaryOperator Operator {get;}
         public AnnotatedExpression Operand {get;}
     }

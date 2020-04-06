@@ -6,5 +6,8 @@ namespace swifty.Code.Annotation {
         Division,
         LogicalOr,
         LogicalAnd,
+        Equality,
+        Inequality,
+        Logical
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using swifty.Code.Syntaxt;
 using swifty.Code.Annotation;
 namespace swifty.Code {
     internal class Evaluator {
@@ -39,6 +38,9 @@ namespace swifty.Code {
                     }
                     case AnnotatedBinaryOperatorKind.LogicalAnd : return (bool)left && (bool)right;
                     case AnnotatedBinaryOperatorKind.LogicalOr: return (bool)left || (bool)right;
+                    case AnnotatedBinaryOperatorKind.Equality: return Equals(left, right);
+                    case AnnotatedBinaryOperatorKind.Inequality:
+                    return !Equals(left, right);
                     default: throw new Exception($"Unexpected binary operator {b.Operator.Kind}");
                 }
             }
