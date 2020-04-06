@@ -31,7 +31,7 @@ namespace swifty.Code.Syntaxt {
         }
         private SyntaxToken MatchToken(SyntaxKind kind) {
             if (Current.Kind == kind) return NextToken();
-            _diagnostics.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
+            _diagnostics.ReportUnexpectedToken(Current.Span, kind, Current.Kind);
             return new SyntaxToken(kind, Current.Position, null, null);
         }
         public SyntaxTree Parse() {
