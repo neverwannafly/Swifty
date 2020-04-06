@@ -61,7 +61,6 @@ namespace swifty.Code.Annotation {
                 switch(kind) {
                     case SyntaxKind.PlusToken: return AnnotatedUnaryOperatorKind.Identity;
                     case SyntaxKind.MinusToken: return AnnotatedUnaryOperatorKind.Negation;
-                    default: throw new Exception($"Unexpected unary operator {kind}");
                 }
             }
             if (type == typeof(bool)) {
