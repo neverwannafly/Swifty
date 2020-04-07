@@ -27,13 +27,19 @@ namespace swifty.Code.Annotation {
                 _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
                 return new AnnotatedLiteralExpression(0);
             }
-            // var type = value?.GetType() ?? typeof(object);
-            var type = typeof(int);
+            var type = value.GetType();
             return new AnnotatedVariableExpression(name, type);
         }
         public AnnotatedExpression AnnotateAssignmentExpression(AssignmentExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;
             var annotatedExpression = AnnotateExpression(syntax.Expression);
+
+            var defaultValue = annotatedExpression.Type == typeof(int) ? (object)0 : annotatedExpression.Type == typeof(bool) ? (object)false : (object)null;
+
+            if (defaultValue == null) {
+                throw new Exception($"Unsupported variable type: {annotatedExpression.Type}");
+            }
+            _symbolTable[name] = defaultValue;
             return new AnnotatedAssignmentExpression(name, annotatedExpression);
         }
         public AnnotatedExpression AnnotateParanthesisExpression(ParanthesisExpressionSyntax syntax) {
