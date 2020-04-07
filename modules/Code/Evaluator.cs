@@ -5,8 +5,8 @@ using swifty.Code.Annotation;
 namespace swifty.Code {
     internal class Evaluator {
         private readonly AnnotatedExpression _root;
-        private readonly Dictionary<string,object> _symbolTable;
-        public Evaluator(AnnotatedExpression root, Dictionary<string,object> symbolTable) {
+        private readonly Dictionary<VariableSymbol,object> _symbolTable;
+        public Evaluator(AnnotatedExpression root, Dictionary<VariableSymbol,object> symbolTable) {
             _root = root;
             _symbolTable = symbolTable;
         }
@@ -18,11 +18,11 @@ namespace swifty.Code {
                 return n.Value;
             }
             if (root is AnnotatedVariableExpression v) {
-                return _symbolTable[v.Name];
+                return _symbolTable[v.Symbol];
             }
             if (root is AnnotatedAssignmentExpression a) {
                 var value = EvaluateExpression(a.Expression);
-                _symbolTable[a.Name] = value;
+                _symbolTable[a.Symbol] = value;
                 return value;
             }
             if (root is AnnotatedUnaryExpression u) {

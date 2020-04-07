@@ -1,12 +1,13 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using swifty.Code.Syntaxt;
 
 namespace swifty.Code.Annotation {    
     sealed class Annotator {
-        private readonly Dictionary<string, object> _symbolTable;
+        private readonly Dictionary<VariableSymbol, object> _symbolTable;
         private readonly DiagnosisHandler _diagnostics = new DiagnosisHandler();
-        public Annotator(Dictionary<string,object> symbolTable) {
+        public Annotator(Dictionary<VariableSymbol,object> symbolTable) {
             _symbolTable = symbolTable;
         }
         public DiagnosisHandler Diagnostics => _diagnostics;
@@ -23,24 +24,23 @@ namespace swifty.Code.Annotation {
         }
         public AnnotatedExpression AnnotateNameExpression(NameExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;
-            if (!_symbolTable.TryGetValue(name, out var value)) {
+            var symbol = _symbolTable.Keys.FirstOrDefault(v => v.Name==name);
+            if (symbol == null) {
                 _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
                 return new AnnotatedLiteralExpression(0);
             }
-            var type = value.GetType();
-            return new AnnotatedVariableExpression(name, type);
+            return new AnnotatedVariableExpression(symbol);
         }
         public AnnotatedExpression AnnotateAssignmentExpression(AssignmentExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;
             var annotatedExpression = AnnotateExpression(syntax.Expression);
-
-            var defaultValue = annotatedExpression.Type == typeof(int) ? (object)0 : annotatedExpression.Type == typeof(bool) ? (object)false : (object)null;
-
-            if (defaultValue == null) {
-                throw new Exception($"Unsupported variable type: {annotatedExpression.Type}");
+            var existingSymbol = _symbolTable.Keys.FirstOrDefault(v => v.Name==name);
+            if (existingSymbol != null) {
+                _symbolTable.Remove(existingSymbol);
             }
-            _symbolTable[name] = defaultValue;
-            return new AnnotatedAssignmentExpression(name, annotatedExpression);
+            var symbol = new VariableSymbol(name, annotatedExpression.Type);
+            _symbolTable[symbol] = null;
+            return new AnnotatedAssignmentExpression(symbol, annotatedExpression);
         }
         public AnnotatedExpression AnnotateParanthesisExpression(ParanthesisExpressionSyntax syntax) {
             return AnnotateExpression(syntax.Expression);

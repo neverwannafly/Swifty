@@ -10,7 +10,7 @@ namespace swifty.Code {
             Syntax = syntax;
         }
         public SyntaxTree Syntax {get;}
-        public EvaluationResult EvaluationResult(Dictionary<string,object> symbolTable) {
+        public EvaluationResult EvaluationResult(Dictionary<VariableSymbol,object> symbolTable) {
             var annotator = new Annotator(symbolTable);
             var annotatedExpression = annotator.AnnotateExpression(Syntax.Root);
             var diagnostics = Syntax.Diagnostics.Concat(annotator.Diagnostics);

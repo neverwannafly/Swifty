@@ -9,7 +9,7 @@ namespace swifty {
     internal static class Program {
         private static void Main() {
 
-            var symbolTable = new Dictionary<string,object>();
+            var symbolTable = new Dictionary<VariableSymbol,object>();
 
             while (true) {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;

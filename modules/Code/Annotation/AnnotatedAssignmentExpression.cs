@@ -2,13 +2,13 @@ using System;
 
 namespace swifty.Code.Annotation {
     internal sealed class AnnotatedAssignmentExpression : AnnotatedExpression {
-        public AnnotatedAssignmentExpression(string name, AnnotatedExpression expression) {
-            Name = name;
+        public AnnotatedAssignmentExpression(VariableSymbol symbol, AnnotatedExpression expression) {
+            Symbol = symbol;
             Expression = expression;
         }
-        public string Name {get;}
+        public VariableSymbol Symbol {get;}
         public AnnotatedExpression Expression {get;}
-        public override Type Type => Expression.Type;
+        public override Type Type => Symbol.Type;
         public override AnnotatedKind Kind => AnnotatedKind.AssignmentExpression;
     }
 }
