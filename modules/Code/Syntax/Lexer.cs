@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 namespace swifty.Code.Syntaxt {
     internal sealed class Lexer {
         private readonly string _text;
         private int _position;
-        private List<string> _diagnostics = new List<string>();
+        private DiagnosisHandler _diagnostics = new DiagnosisHandler();
         public Lexer(string text) {
             _text = text;
         }
-        public IEnumerable<string> Diagnostics => _diagnostics;
+        public DiagnosisHandler Diagnostics => _diagnostics;
         private char Current => Peek(0);
         private char LookAhead => Peek(1);
         private char Peek(int offset) {
@@ -28,7 +27,7 @@ namespace swifty.Code.Syntaxt {
                 int len = _position - start;
                 string text = _text.Substring(start, len);
                 if (!int.TryParse(text, out var value)){
-                    _diagnostics.Add($"The number {_text} is invalid Int32");
+                    _diagnostics.ReportInvalidNumber(new TextSpan(start, len), text, typeof(int));
                 };
                 return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
             }
@@ -81,8 +80,15 @@ namespace swifty.Code.Syntaxt {
                     }
                     break;
                 }
+                case ':' : {
+                    if (LookAhead=='=') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.AssignmentToken, _position-1, ":=", null);
+                    }
+                    break;
+                }
             }
-            _diagnostics.Add($"ERROR: Bad character input : '{Current}'");
+            _diagnostics.ReportBadCharacter(_position, Current);
             return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);
         }
     }

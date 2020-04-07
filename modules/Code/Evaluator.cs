@@ -1,42 +1,14 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using swifty.Code.Annotation;
-using swifty.Code.Syntaxt;
 
 namespace swifty.Code {
-
-    public sealed class Compiler {
-        public Compiler(SyntaxTree syntax) {
-            Syntax = syntax;
-        }
-        public SyntaxTree Syntax {get;}
-        public EvaluationResult EvaluationResult() {
-            var annotator = new Annotator();
-            var annotatedExpression = annotator.AnnotateExpression(Syntax.Root);
-            var diagnostics = Syntax.Diagnostics.Concat(annotator.Diagnostics).ToArray();
-            if (diagnostics.Any()) {
-                return new EvaluationResult(diagnostics, null);
-            }
-            var evaluator = new Evaluator(annotatedExpression);
-            var value = evaluator.Evaluate();
-            return new EvaluationResult(Array.Empty<string>(), value);
-        }
-    }
-
-    public sealed class EvaluationResult {
-        public EvaluationResult(IEnumerable<string> diagnostics, object value) {
-            Diagnostics = diagnostics.ToArray();
-            Value = value;
-        }
-        public IReadOnlyList<string> Diagnostics {get;}
-        public object Value {get;}
-    }
-
     internal class Evaluator {
         private readonly AnnotatedExpression _root;
-        public Evaluator(AnnotatedExpression root) {
+        private readonly Dictionary<VariableSymbol,object> _symbolTable;
+        public Evaluator(AnnotatedExpression root, Dictionary<VariableSymbol,object> symbolTable) {
             _root = root;
+            _symbolTable = symbolTable;
         }
         public object Evaluate() {
             return EvaluateExpression(_root);
@@ -44,6 +16,14 @@ namespace swifty.Code {
         private object EvaluateExpression(AnnotatedExpression root) {
             if (root is AnnotatedLiteralExpression n) {
                 return n.Value;
+            }
+            if (root is AnnotatedVariableExpression v) {
+                return _symbolTable[v.Symbol];
+            }
+            if (root is AnnotatedAssignmentExpression a) {
+                var value = EvaluateExpression(a.Expression);
+                _symbolTable[a.Symbol] = value;
+                return value;
             }
             if (root is AnnotatedUnaryExpression u) {
                 object operand = EvaluateExpression(u.Operand);

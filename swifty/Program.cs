@@ -4,40 +4,54 @@ using System.Collections.Generic;
 
 using swifty.Code;
 using swifty.Code.Syntaxt;
-using swifty.Code.Annotation;
 
 namespace swifty {
     internal static class Program {
         private static void Main() {
+
+            var symbolTable = new Dictionary<VariableSymbol,object>();
+
             while (true) {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.Write("> ");
                 string line = Console.ReadLine();
 
                 var syntaxTree = SyntaxTree.Parse(line);
 
-                var color = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.DarkBlue;
-                print(syntaxTree.Root);
-                Console.ForegroundColor = color;
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                drawTree(syntaxTree.Root);
 
                 var compiler = new Compiler(syntaxTree);
-                var result = compiler.EvaluationResult();
+                var result = compiler.EvaluationResult(symbolTable);
 
                 object value = result.Value;
-                IReadOnlyList<string> diagnostics = result.Diagnostics;
+                var diagnostics = result.Diagnostics;
 
                 if (!diagnostics.Any()) {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(value);
                 } else {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     foreach(var diagnostic in diagnostics) {
-                        Console.WriteLine(diagnostic);
+                        printDiagnostics(line, diagnostic);
                     }
-                    Console.ForegroundColor = color;
                 }
             }
         }
-        static void print(SyntaxNode node, string indent="", bool isLast=true) {
+        static void printDiagnostics(string line, Diagnostic diagnostic) {
+            Console.WriteLine();
+            var prefix = line.Substring(0, diagnostic.Span.Start);
+            var error = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
+            var suffix = line.Substring(diagnostic.Span.End);
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write($"\t{prefix}");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write(error);
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine(suffix);
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine(diagnostic);
+        }
+        static void drawTree(SyntaxNode node, string indent="", bool isLast=true) {
             var marker = isLast? "└──" : "├──";
             Console.Write(indent);
             Console.Write(marker);
@@ -49,7 +63,7 @@ namespace swifty {
             Console.WriteLine();
             var lastChild = node.GetChildren().LastOrDefault();
             foreach (var child in node.GetChildren()) {
-                print(child, indent, child==lastChild);
+                drawTree(child, indent, child==lastChild);
             }
         }
     }

@@ -12,6 +12,7 @@ namespace swifty.Code.Syntaxt {
         NotToken,
         AndToken,
         OrToken,
+        AssignmentToken,
         XorToken,
         LeftParanthesisToken,
         RightParanthesisToken,
@@ -26,5 +27,7 @@ namespace swifty.Code.Syntaxt {
         BinaryExpression,
         ParathesisExpression,
         UnaryExpression,
+        NameExpression,
+        AssignmentExpression,
     }
 }

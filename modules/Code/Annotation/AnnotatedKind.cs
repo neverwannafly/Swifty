@@ -3,5 +3,7 @@ namespace swifty.Code.Annotation {
         UnaryExpression,
         LiteralExpression,
         BinaryExpression,
+        VariableExpression,
+        AssignmentExpression,
     }
 }
