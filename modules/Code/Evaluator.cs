@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using swifty.Code.Annotation;
 
 namespace swifty.Code {
     internal class Evaluator {
         private readonly AnnotatedExpression _root;
-        public Evaluator(AnnotatedExpression root) {
+        private readonly Dictionary<string,object> _symbolTable;
+        public Evaluator(AnnotatedExpression root, Dictionary<string,object> symbolTable) {
             _root = root;
+            _symbolTable = symbolTable;
         }
         public object Evaluate() {
             return EvaluateExpression(_root);
@@ -13,6 +16,14 @@ namespace swifty.Code {
         private object EvaluateExpression(AnnotatedExpression root) {
             if (root is AnnotatedLiteralExpression n) {
                 return n.Value;
+            }
+            if (root is AnnotatedVariableExpression v) {
+                return _symbolTable[v.Name];
+            }
+            if (root is AnnotatedAssignmentExpression a) {
+                var value = EvaluateExpression(a.Expression);
+                _symbolTable[a.Name] = value;
+                return value;
             }
             if (root is AnnotatedUnaryExpression u) {
                 object operand = EvaluateExpression(u.Operand);

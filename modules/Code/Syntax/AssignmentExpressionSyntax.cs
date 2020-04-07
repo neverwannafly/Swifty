@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace swifty.Code.Syntaxt {
     // Assignment operator needs to be right associative
-    public sealed class AssignmentExpression : ExpressionSyntax {
-        public AssignmentExpression(SyntaxToken identifierToken, SyntaxToken equalToken, ExpressionSyntax expression) {
+    public sealed class AssignmentExpressionSyntax : ExpressionSyntax {
+        public AssignmentExpressionSyntax(SyntaxToken identifierToken, SyntaxToken equalToken, ExpressionSyntax expression) {
            IdentifierToken = identifierToken;
            EqualToken = equalToken;
            Expression = expression;

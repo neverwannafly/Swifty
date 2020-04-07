@@ -40,5 +40,9 @@ namespace swifty.Code {
             var message = $"SEMANTIC_ERROR: Binary operator '{text}' isnt defined for types {leftType} and {rightType}.";
             Report(span, message);
         }
+        public void ReportUndefinedName(TextSpan span, string name) {
+            var message = $"Variable '{name}' doesnt exist.";
+            Report(span, message);
+        }
     }
 }

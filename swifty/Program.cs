@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 
 using swifty.Code;
 using swifty.Code.Syntaxt;
@@ -7,6 +8,9 @@ using swifty.Code.Syntaxt;
 namespace swifty {
     internal static class Program {
         private static void Main() {
+
+            var symbolTable = new Dictionary<string,object>();
+
             while (true) {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.Write("> ");
@@ -18,7 +22,7 @@ namespace swifty {
                 drawTree(syntaxTree.Root);
 
                 var compiler = new Compiler(syntaxTree);
-                var result = compiler.EvaluationResult();
+                var result = compiler.EvaluationResult(symbolTable);
 
                 object value = result.Value;
                 var diagnostics = result.Diagnostics;

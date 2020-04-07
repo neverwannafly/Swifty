@@ -80,6 +80,13 @@ namespace swifty.Code.Syntaxt {
                     }
                     break;
                 }
+                case ':' : {
+                    if (LookAhead=='=') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.AssignmentToken, _position-1, ":=", null);
+                    }
+                    break;
+                }
             }
             _diagnostics.ReportBadCharacter(_position, Current);
             return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);

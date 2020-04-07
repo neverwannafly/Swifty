@@ -40,11 +40,23 @@ namespace swifty.Code.Syntaxt {
             return new SyntaxTree(_diagnostics ,expression, endofFileToken);
         }
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
+            return ParseAssignmentExpression();
+        }
+        private ExpressionSyntax ParseAssignmentExpression() {
+            if (Current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind==SyntaxKind.AssignmentToken) {
+                var identifierToken = NextToken();
+                var operatorToken = NextToken();
+                var right = ParseAssignmentExpression();
+                return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
+            }
+            return ParseBinaryExpression();
+        }
+        private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0) {
             ExpressionSyntax left;
             int unaryPrec = Current.Kind.GetUnaryOperatorPrecedence();
             if (unaryPrec!=0 && unaryPrec >= parentPrecedence) {
                 SyntaxToken opToken = NextToken();
-                ExpressionSyntax operand = ParseExpression(unaryPrec);
+                ExpressionSyntax operand = ParseBinaryExpression(unaryPrec);
                 left = new UnaryExpressionSyntax(opToken, operand);
             } else {
                 left = ParsePrimaryExpression();
@@ -54,7 +66,7 @@ namespace swifty.Code.Syntaxt {
                 int precedence = Current.Kind.GetBinaryOperatorPrecendence();
                 if (precedence == 0 || precedence <= parentPrecedence) break;
                 SyntaxToken operatorToken = NextToken();
-                ExpressionSyntax right = ParseExpression(precedence);
+                ExpressionSyntax right = ParseBinaryExpression(precedence);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
             return left;
@@ -72,6 +84,10 @@ namespace swifty.Code.Syntaxt {
                     var keywordToken = NextToken();
                     var value = (keywordToken.Kind == SyntaxKind.TrueKeyword);
                     return new LiteralExpressionSyntax(keywordToken, value);
+                }
+                case SyntaxKind.IdentifierToken: {
+                    var identifierToken = NextToken();
+                    return new NameExpressionSyntax(identifierToken);
                 }
                 default: {
                     SyntaxToken numberToken = MatchToken(SyntaxKind.NumberToken);
