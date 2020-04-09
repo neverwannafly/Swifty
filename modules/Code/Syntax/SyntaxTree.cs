@@ -15,5 +15,13 @@ namespace swifty.Code.Syntaxt {
             var parser = new Parser(text);
             return parser.Parse();
         }
+        public static IEnumerable<SyntaxToken> ParseToken(string text) {
+            var lexer = new Lexer(text);
+            while (true) {
+                SyntaxToken token = lexer.Lex();
+                if (token.Kind == SyntaxKind.EndofFileToken) break;
+                yield return token;
+            }
+        }
     }
 }
