@@ -17,7 +17,7 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 - script: dotnet test --logger "xunit;LogFileName=TestResults.xml"
   displayName: 'dotnet test'
-- task: PublishResults@2
+- task: PublishTestResults@2
   displayName: 'publish test results'
   inputs:
     testResultsFormat: 'xUnit'
