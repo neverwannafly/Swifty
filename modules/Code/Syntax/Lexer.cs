@@ -55,6 +55,7 @@ namespace swifty.Code.Syntaxt {
                 case ')':  return new SyntaxToken(SyntaxKind.RightParanthesisToken, _position++, ")", null);
                 case '!': { 
                     if (LookAhead=='=') {
+                        _position += 2;
                         return new SyntaxToken(SyntaxKind.NotEqualToken, _position-2, "!=", null);
                     }
                     return new SyntaxToken(SyntaxKind.NotToken, _position++, "!", null); 
