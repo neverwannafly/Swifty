@@ -15,7 +15,7 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet test --logger "xunit;LogFileName=TestResults.xml"
+- script: dotnet test --logger "xunit;"
   displayName: 'dotnet test'
 - task: PublishTestResults@2
   displayName: 'publish test results'
