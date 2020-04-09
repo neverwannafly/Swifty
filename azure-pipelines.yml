@@ -21,4 +21,4 @@ steps:
   displayName: 'publish test results'
   inputs:
     testResultsFormat: 'xUnit'
-    testResultFiles: '**/TestResults.xml'
+    testResultFiles: 'TestResults.xml'
