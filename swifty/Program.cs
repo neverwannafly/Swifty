@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using swifty.Code;
+using swifty.Code.Text;
 using swifty.Code.Syntaxt;
 
 namespace swifty {

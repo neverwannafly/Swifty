@@ -1,4 +1,4 @@
-namespace swifty.Code {
+namespace swifty.Code.Text {
     public struct TextSpan {
         public TextSpan(int start, int length) {
             Start = start;

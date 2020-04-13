@@ -1,4 +1,4 @@
-using System;
+using swifty.Code.Text;
 
 namespace swifty.Code.Syntaxt {
     internal sealed class Lexer {
