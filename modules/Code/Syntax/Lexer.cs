@@ -46,7 +46,7 @@ namespace swifty.Code.Syntaxt {
                 return new SyntaxToken(kind, start, text, null);
             }
             switch(Current) {
-                case '\0': return new SyntaxToken(SyntaxKind.EndofFileToken, _position++, "\0", null);
+                case '\0': return new SyntaxToken(SyntaxKind.EndofFileToken, _position++, "", null);
                 case '+':  return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
                 case '-':  return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
                 case '*':  return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
