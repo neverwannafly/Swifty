@@ -4,6 +4,7 @@ using swifty.Code.Text;
 namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
+        private readonly SourceText _text;
         private DiagnosisHandler _diagnostics = new DiagnosisHandler();
         private int _position;
         public Parser(SourceText text) {
@@ -18,6 +19,7 @@ namespace swifty.Code.Syntaxt {
             } while (token.Kind!=SyntaxKind.EndofFileToken);
             _tokens = tokens.ToArray();
             _diagnostics.AddRange(lexer.Diagnostics);
+            _text = text;
         }
         public DiagnosisHandler Diagnostics => _diagnostics;
         private SyntaxToken Peek(int offset) {
@@ -39,7 +41,7 @@ namespace swifty.Code.Syntaxt {
         public SyntaxTree Parse() {
             var expression = ParseExpression();
             var endofFileToken = MatchToken(SyntaxKind.EndofFileToken);
-            return new SyntaxTree(_diagnostics ,expression, endofFileToken);
+            return new SyntaxTree(_text, _diagnostics ,expression, endofFileToken);
         }
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
             return ParseAssignmentExpression();

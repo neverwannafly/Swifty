@@ -18,6 +18,7 @@ namespace swifty {
                 string line = Console.ReadLine();
 
                 var syntaxTree = SyntaxTree.Parse(line);
+                var text = syntaxTree.SourceText;
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.Write(syntaxTree.Root.ToString());
@@ -33,12 +34,15 @@ namespace swifty {
                     Console.WriteLine(value);
                 } else {
                     foreach(var diagnostic in diagnostics) {
-                        printDiagnostics(line, diagnostic);
+                        int lineIndex = text.GetLineIndex(diagnostic.Span.Start);
+                        int lineNumber = lineIndex+1;
+                        int character = diagnostic.Span.Start - text.Lines[lineIndex].Start + 1;
+                        printDiagnostics(line, diagnostic, lineNumber, character);
                     }
                 }
             }
         }
-        static void printDiagnostics(string line, Diagnostic diagnostic) {
+        static void printDiagnostics(string line, Diagnostic diagnostic, int lineNumber, int character) {
             Console.WriteLine();
             var prefix = line.Substring(0, diagnostic.Span.Start);
             var error = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
@@ -50,6 +54,7 @@ namespace swifty {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine(suffix);
             Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write($"[{lineNumber} {character}] : ");
             Console.WriteLine(diagnostic);
         }
     }
