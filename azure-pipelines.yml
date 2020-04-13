@@ -18,7 +18,6 @@ steps:
 - script: dotnet test --logger "xunit;"
   displayName: 'dotnet test'
 - task: PublishTestResults@2
-  displayName: 'publish test results'
   inputs:
-    testResultsFormat: 'xUnit'
-    testResultFiles: 'TestResults.xml'
+    testResultsFormat: 'XUnit'
+    testResultsFiles: '**/TestResults.xml'
