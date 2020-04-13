@@ -19,7 +19,7 @@ namespace swifty {
                 var syntaxTree = SyntaxTree.Parse(line);
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                drawTree(syntaxTree.Root);
+                Console.Write(syntaxTree.Root.ToString());
 
                 var compiler = new Compiler(syntaxTree);
                 var result = compiler.EvaluationResult(symbolTable);
@@ -50,21 +50,6 @@ namespace swifty {
             Console.WriteLine(suffix);
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(diagnostic);
-        }
-        static void drawTree(SyntaxNode node, string indent="", bool isLast=true) {
-            var marker = isLast? "└──" : "├──";
-            Console.Write(indent);
-            Console.Write(marker);
-            Console.Write(node.Kind);
-            if (node is SyntaxToken t && t.Value!=null) {
-                Console.Write($" {t.Value}");
-            }
-            indent += isLast ? "   ":"|   ";
-            Console.WriteLine();
-            var lastChild = node.GetChildren().LastOrDefault();
-            foreach (var child in node.GetChildren()) {
-                drawTree(child, indent, child==lastChild);
-            }
         }
     }
 }
