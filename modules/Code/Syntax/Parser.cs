@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-
 using swifty.Code.Text;
+
 namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
