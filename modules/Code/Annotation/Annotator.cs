@@ -36,7 +36,7 @@ namespace swifty.Code.Annotation {
             var annotatedExpression = AnnotateExpression(syntax.Expression);
             var existingSymbol = _symbolTable.Keys.FirstOrDefault(v => v.Name==name);
             if (existingSymbol != null) {
-                _symbolTable.Remove(existingSymbol);
+                // _symbolTable.Remove(existingSymbol);
             }
             var symbol = new VariableSymbol(name, annotatedExpression.Type);
             _symbolTable[symbol] = null;
