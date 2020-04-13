@@ -2,10 +2,10 @@ using swifty.Code.Text;
 
 namespace swifty.Code.Syntaxt {
     internal sealed class Lexer {
-        private readonly string _text;
+        private readonly SourceText _text;
         private int _position;
         private DiagnosisHandler _diagnostics = new DiagnosisHandler();
-        public Lexer(string text) {
+        public Lexer(SourceText text) {
             _text = text;
         }
         public DiagnosisHandler Diagnostics => _diagnostics;
@@ -24,14 +24,14 @@ namespace swifty.Code.Syntaxt {
                 int start = _position;
                 while (char.IsWhiteSpace(Current)) Next();
                 int len = _position - start;
-                string text = _text.Substring(start, len);
+                string text = _text.ToString(start, len);
                 return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
             }
             if (char.IsDigit(Current)) {
                 int start = _position;
                 while (char.IsDigit(Current)) Next();
                 int len = _position - start;
-                string text = _text.Substring(start, len);
+                string text = _text.ToString(start, len);
                 if (!int.TryParse(text, out var value)){
                     _diagnostics.ReportInvalidNumber(new TextSpan(start, len), text, typeof(int));
                 };
@@ -41,7 +41,7 @@ namespace swifty.Code.Syntaxt {
                 int start = _position;
                 while (char.IsLetter(Current)) Next();
                 int len = _position - start;
-                string text = _text.Substring(start, len);
+                string text = _text.ToString(start, len);
                 var kind = SyntaxRules.GetKeywordKind(text);
                 return new SyntaxToken(kind, start, text, null);
             }
@@ -90,7 +90,7 @@ namespace swifty.Code.Syntaxt {
                 }
             }
             _diagnostics.ReportBadCharacter(_position, Current);
-            return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position-1, 1), null);
+            return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.ToString(_position-1, 1), null);
         }
     }
 }

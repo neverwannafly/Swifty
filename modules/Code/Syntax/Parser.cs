@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+
+using swifty.Code.Text;
 namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
         private DiagnosisHandler _diagnostics = new DiagnosisHandler();
         private int _position;
-        public Parser(string text) {
+        public Parser(SourceText text) {
             Lexer lexer = new Lexer(text);
             SyntaxToken token;
             List<SyntaxToken> tokens = new List<SyntaxToken>();
