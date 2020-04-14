@@ -42,6 +42,10 @@ namespace swifty {
                         showTree = false;
                         continue;
                     }
+                    if (input == "#RESET") {
+                        prev = null;
+                        continue;
+                    }
                 }
 
                 textBuilder.AppendLine(input);
