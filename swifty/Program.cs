@@ -1,26 +1,60 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Collections.Generic;
 
 using swifty.Code;
 using swifty.Code.Syntaxt;
+using swifty.Code.Text;
 
 namespace swifty {
     internal static class Program {
         private static void Main() {
 
             var symbolTable = new Dictionary<VariableSymbol,object>();
+            var textBuilder = new StringBuilder();
+            bool showTree = true;
 
             while (true) {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.Write("> ");
-                string line = Console.ReadLine();
 
-                var syntaxTree = SyntaxTree.Parse(line);
-                var text = syntaxTree.SourceText;
+                if (textBuilder.Length  == 0) {
+                    Console.Write("> ");
+                } else {
+                    Console.Write(". ");
+                }
+
+                string input = Console.ReadLine();
+                bool isBlank = String.IsNullOrWhiteSpace(input);
+                
+                if (textBuilder.Length==0) {
+                    if (isBlank) break;
+                    if (input == "#CLEAR") {
+                        Console.Clear();
+                        continue;
+                    }
+                    if (input == "#TREE") {
+                        showTree = true;
+                        continue;
+                    }
+                    if (input == "#HIDETREE") {
+                        showTree = false;
+                        continue;
+                    }
+                }
+
+                textBuilder.AppendLine(input);
+                var feed = textBuilder.ToString();
+
+                var syntaxTree = SyntaxTree.Parse(feed);
+                if (!isBlank && syntaxTree.Diagnostics.Any()) {
+                    continue;
+                }
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write(syntaxTree.Root.ToString());
+                if (showTree) {
+                    Console.Write(syntaxTree.Root.ToString());
+                }
 
                 var compiler = new Compiler(syntaxTree);
                 var result = compiler.EvaluationResult(symbolTable);
@@ -33,19 +67,26 @@ namespace swifty {
                     Console.WriteLine(value);
                 } else {
                     foreach(var diagnostic in diagnostics) {
-                        int lineIndex = text.GetLineIndex(diagnostic.Span.Start);
-                        int lineNumber = lineIndex+1;
-                        int character = diagnostic.Span.Start - text.Lines[lineIndex].Start + 1;
-                        printDiagnostics(line, diagnostic, lineNumber, character);
+                        int lineIndex = syntaxTree.SourceText.GetLineIndex(diagnostic.Span.Start);
+                        var line = syntaxTree.SourceText;
+                        int character = diagnostic.Span.Start - line.Lines[lineIndex].Start + 1;
+                        printDiagnostics(line, diagnostic, lineIndex, character);
                     }
                 }
+                textBuilder.Clear();
             }
         }
-        static void printDiagnostics(string line, Diagnostic diagnostic, int lineNumber, int character) {
+        static void printDiagnostics(SourceText line, Diagnostic diagnostic, int lineIndex, int character) {
             Console.WriteLine();
-            var prefix = line.Substring(0, diagnostic.Span.Start);
-            var error = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
-            var suffix = line.Substring(diagnostic.Span.End);
+
+            var lineInfo = line.Lines[lineIndex];
+            var prefixSpan = TextSpan.FromBound(lineInfo.Start, diagnostic.Span.Start);
+            var suffixSpan = TextSpan.FromBound(diagnostic.Span.End, lineInfo.End);
+
+            var prefix = line.ToString(prefixSpan);
+            var error = line.ToString(diagnostic.Span);
+            var suffix = line.ToString(suffixSpan);
+
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write($"\t{prefix}");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -53,7 +94,7 @@ namespace swifty {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine(suffix);
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write($"[{lineNumber} {character}] : ");
+            Console.Write($"[{lineIndex+1} {character}] : ");
             Console.WriteLine(diagnostic);
         }
     }

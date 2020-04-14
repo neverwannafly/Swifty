@@ -12,6 +12,7 @@ namespace swifty.Code.Text {
         public int Length {get;}
         public int EOLlength {get;}
         public TextSpan Span => new TextSpan(Start, Length);
+        public int End => Start + Length;
         public TextSpan EOLSpan => new TextSpan(Start, EOLlength);
         public override string ToString() => Text.ToString(Span);
         public string ToString(int start, int length) => Text.ToString(start, length);
