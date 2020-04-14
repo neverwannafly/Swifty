@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using swifty.Code.Syntaxt;
 using System.Collections.Immutable;
@@ -14,7 +13,7 @@ namespace swifty.Code.Annotation {
         public static AnnotationGlobalScope AnnotateGlobalScope(AnnotationGlobalScope previous, CompilationUnitSyntax syntax) {
             var parentScope = CreateParentScope(previous);
             var annotator = new Annotator(parentScope);
-            var expression = annotator.AnnotateExpression(syntax.Expression);
+            var expression = annotator.AnnotateStatement(syntax.Statement);
             var symbols = annotator._scope.GetDeclaredVariables();
             var diagnostics = annotator.Diagnostics.ToImmutableArray();
             if (previous != null) {
@@ -50,6 +49,25 @@ namespace swifty.Code.Annotation {
                 case SyntaxKind.AssignmentExpression: return AnnotateAssignmentExpression((AssignmentExpressionSyntax)syntax);
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
+        }
+        public AnnotatedStatement AnnotateStatement(StatementSyntax syntax) {
+            switch(syntax.Kind) {
+                case SyntaxKind.BlockStatement: return AnnotateBlockStatement((BlockStatementSyntax)syntax);
+                case SyntaxKind.ExpressionStatement: return AnnotateExpressionStatement((ExpressionStatementSyntax)syntax);
+                default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
+            }
+        }
+        private AnnotatedStatement AnnotateBlockStatement(BlockStatementSyntax statement) {
+            var statements = ImmutableArray.CreateBuilder<AnnotatedStatement>();
+            foreach (var statementSyntax in statement.Statements) {
+                var st =  AnnotateStatement(statementSyntax);
+                statements.Add(st);
+            }
+            return new AnnotatedBlockStatement(statements.ToImmutable());
+        }
+        public AnnotatedStatement AnnotateExpressionStatement(ExpressionStatementSyntax statement) {
+            var expression = AnnotateExpression(statement.Expression);
+            return new AnnotatedExpressionStatement(expression);
         }
         public AnnotatedExpression AnnotateNameExpression(NameExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;

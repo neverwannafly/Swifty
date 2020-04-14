@@ -88,6 +88,12 @@ namespace swifty.Code.Syntaxt {
                     }
                     break;
                 }
+                case '{' : {
+                    return new SyntaxToken(SyntaxKind.OpenBraceToken, _position++, "{", null);
+                }
+                case '}' : {
+                    return new SyntaxToken(SyntaxKind.CloseBraceToken, _position++, "}", null);
+                }
             }
             _diagnostics.ReportBadCharacter(_position, Current);
             return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.ToString(_position-1, 1), null);

@@ -16,6 +16,8 @@ namespace swifty.Code.Syntaxt {
         XorToken,
         LeftParanthesisToken,
         RightParanthesisToken,
+        OpenBraceToken,
+        CloseBraceToken,
         EndofFileToken,
         IdentifierToken,
         BadToken,
@@ -24,6 +26,9 @@ namespace swifty.Code.Syntaxt {
         FalseKeyword,
         // Nodes
         CompilationUnit,
+        // Statements
+        BlockStatement,
+        ExpressionStatement,
         // Expressions
         LiteralExpression,
         BinaryExpression,

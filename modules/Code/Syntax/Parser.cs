@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using swifty.Code.Text;
+using System.Collections.Immutable;
 
 namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
@@ -39,12 +40,18 @@ namespace swifty.Code.Syntaxt {
             return new SyntaxToken(kind, Current.Position, null, null);
         }
         public CompilationUnitSyntax ParseCompilationUnit() {
-            var expression = ParseExpression();
+            var statements = ParseStatement();
             var endofFileToken = MatchToken(SyntaxKind.EndofFileToken);
-            return new CompilationUnitSyntax(expression, endofFileToken);
+            return new CompilationUnitSyntax(statements, endofFileToken);
         }
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
             return ParseAssignmentExpression();
+        }
+        private StatementSyntax ParseStatement() {
+            if (Current.Kind == SyntaxKind.OpenBraceToken) {
+                return ParseBlockStatement();
+            }
+            return ParseExpressionStatement();
         }
         private ExpressionSyntax ParseAssignmentExpression() {
             if (Current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind==SyntaxKind.AssignmentToken) {
@@ -54,6 +61,20 @@ namespace swifty.Code.Syntaxt {
                 return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
             }
             return ParseBinaryExpression();
+        }
+        private ExpressionStatementSyntax ParseExpressionStatement() {
+            var expression = ParseExpression();
+            return new ExpressionStatementSyntax(expression);
+        }
+        private BlockStatementSyntax ParseBlockStatement() {
+            var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
+            var openBrace = MatchToken(SyntaxKind.OpenBraceToken);
+            while (Current.Kind != SyntaxKind.CloseBraceToken && Current.Kind != SyntaxKind.EndofFileToken) {
+                var statement = ParseStatement();
+                statements.Add(statement);
+            }
+            var closeBrace = MatchToken(SyntaxKind.CloseBraceToken);
+            return new BlockStatementSyntax(openBrace, statements.ToImmutable(), closeBrace);
         }
         private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0) {
             ExpressionSyntax left;

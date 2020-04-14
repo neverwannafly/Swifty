@@ -4,14 +4,29 @@ using swifty.Code.Annotation;
 
 namespace swifty.Code {
     internal class Evaluator {
-        private readonly AnnotatedExpression _root;
+        private readonly AnnotatedStatement _root;
         private readonly Dictionary<VariableSymbol,object> _symbolTable;
-        public Evaluator(AnnotatedExpression root, Dictionary<VariableSymbol,object> symbolTable) {
+        private object _lastValue;
+        public Evaluator(AnnotatedStatement root, Dictionary<VariableSymbol,object> symbolTable) {
             _root = root;
             _symbolTable = symbolTable;
         }
         public object Evaluate() {
-            return EvaluateExpression(_root);
+            EvaluateStatement(_root);
+            return _lastValue;
+        }
+        private void EvaluateStatement(AnnotatedStatement statement) {
+            if (statement is AnnotatedBlockStatement b) {
+                foreach(var st in b.Statements) {
+                    EvaluateStatement(st);
+                }
+                return;
+            }
+            if (statement is AnnotatedExpressionStatement e) {
+                _lastValue = EvaluateExpression(e.Expression);
+                return;
+            }
+            throw new Exception($"Unexpected node {statement.Kind}");
         }
         private object EvaluateExpression(AnnotatedExpression root) {
             if (root is AnnotatedLiteralExpression n) {
