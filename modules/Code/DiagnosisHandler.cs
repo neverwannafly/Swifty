@@ -45,5 +45,9 @@ namespace swifty.Code {
             var message = $"Variable '{name}' doesnt exist.";
             Report(span, message);
         }
+        public void ReportVariableAlreadyDeclared(TextSpan span, string name) {
+            var message = $"Variable {name} is already declared";
+            Report(span, message);
+        }
     }
 }

@@ -2,13 +2,39 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using swifty.Code.Syntaxt;
+using System.Collections.Immutable;
 
 namespace swifty.Code.Annotation {    
     sealed class Annotator {
-        private readonly Dictionary<VariableSymbol, object> _symbolTable;
+        private AnnotationScope _scope;
         private readonly DiagnosisHandler _diagnostics = new DiagnosisHandler();
-        public Annotator(Dictionary<VariableSymbol,object> symbolTable) {
-            _symbolTable = symbolTable;
+        public Annotator(AnnotationScope parent) {
+            _scope = new AnnotationScope(parent);
+        }
+        public static AnnotationGlobalScope AnnotateGlobalScope(AnnotationGlobalScope previous, CompilationUnitSyntax syntax) {
+            var parentScope = CreateParentScope(previous);
+            var annotator = new Annotator(parentScope);
+            var expression = annotator.AnnotateExpression(syntax.Expression);
+            var symbols = annotator._scope.GetDeclaredVariables();
+            var diagnostics = annotator.Diagnostics.ToImmutableArray();
+            return new AnnotationGlobalScope(previous, diagnostics, symbols, expression);
+        }
+        private static AnnotationScope CreateParentScope(AnnotationGlobalScope previous) {
+            var stack = new Stack<AnnotationGlobalScope>();
+            while (previous != null) {
+                stack.Push(previous);
+                previous = previous.Previous;
+            }
+            AnnotationScope parent = null;
+            while (stack.Count > 0) {
+                previous = stack.Pop();
+                var scope = new AnnotationScope(parent);
+                foreach (var v in previous.Symbols) {
+                    scope.TryDeclare(v);
+                }
+                parent = scope;
+            }
+            return parent;
         }
         public DiagnosisHandler Diagnostics => _diagnostics;
         public AnnotatedExpression AnnotateExpression(ExpressionSyntax syntax) {
@@ -24,7 +50,7 @@ namespace swifty.Code.Annotation {
         }
         public AnnotatedExpression AnnotateNameExpression(NameExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;
-            var symbol = _symbolTable.Keys.FirstOrDefault(v => v.Name==name);
+            _scope.TryLookup(name, out var symbol);
             if (symbol == null) {
                 _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
                 return new AnnotatedLiteralExpression(0);
@@ -34,12 +60,11 @@ namespace swifty.Code.Annotation {
         public AnnotatedExpression AnnotateAssignmentExpression(AssignmentExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;
             var annotatedExpression = AnnotateExpression(syntax.Expression);
-            var existingSymbol = _symbolTable.Keys.FirstOrDefault(v => v.Name==name);
-            if (existingSymbol != null) {
-                // _symbolTable.Remove(existingSymbol);
-            }
             var symbol = new VariableSymbol(name, annotatedExpression.Type);
-            _symbolTable[symbol] = null;
+
+            if (!_scope.TryDeclare(symbol)) {
+                _diagnostics.ReportVariableAlreadyDeclared(syntax.IdentifierToken.Span, name);
+            }
             return new AnnotatedAssignmentExpression(symbol, annotatedExpression);
         }
         public AnnotatedExpression AnnotateParanthesisExpression(ParanthesisExpressionSyntax syntax) {

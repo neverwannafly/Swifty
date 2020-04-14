@@ -14,6 +14,7 @@ namespace swifty {
             var symbolTable = new Dictionary<VariableSymbol,object>();
             var textBuilder = new StringBuilder();
             bool showTree = true;
+            Compiler prev = null;
 
             while (true) {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -56,7 +57,7 @@ namespace swifty {
                     Console.Write(syntaxTree.Root.ToString());
                 }
 
-                var compiler = new Compiler(syntaxTree);
+                var compiler = prev == null ? new Compiler(syntaxTree) : prev.ContinueWith(syntaxTree);
                 var result = compiler.EvaluationResult(symbolTable);
 
                 object value = result.Value;
@@ -65,6 +66,7 @@ namespace swifty {
                 if (!diagnostics.Any()) {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(value);
+                    prev = compiler;
                 } else {
                     foreach(var diagnostic in diagnostics) {
                         int lineIndex = syntaxTree.SourceText.GetLineIndex(diagnostic.Span.Start);
