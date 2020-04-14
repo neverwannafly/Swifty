@@ -63,11 +63,17 @@ namespace swifty.Code.Annotation {
         public AnnotatedExpression AnnotateAssignmentExpression(AssignmentExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;
             var annotatedExpression = AnnotateExpression(syntax.Expression);
-            var symbol = new VariableSymbol(name, annotatedExpression.Type);
 
-            if (!_scope.TryDeclare(symbol)) {
-                _diagnostics.ReportVariableAlreadyDeclared(syntax.IdentifierToken.Span, name);
+            if (!_scope.TryLookup(name, out var symbol)) {
+                symbol = new VariableSymbol(name, annotatedExpression.Type);
+                _scope.TryDeclare(symbol);
             }
+
+            if (annotatedExpression.Type != symbol.Type) {
+                _diagnostics.ReportCannotConvert(syntax.Expression.Span, annotatedExpression.Type, symbol.Type);
+                return annotatedExpression;
+            }
+
             return new AnnotatedAssignmentExpression(symbol, annotatedExpression);
         }
         public AnnotatedExpression AnnotateParanthesisExpression(ParanthesisExpressionSyntax syntax) {
