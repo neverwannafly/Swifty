@@ -1,3 +1,5 @@
+using swifty.Code.Text;
+
 namespace swifty.Code {
     public sealed class Diagnostic {
         public Diagnostic(TextSpan span, string message) {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using swifty.Code.Syntaxt;
+using swifty.Code.Text;
 
 namespace swifty.Code {
     internal sealed class DiagnosisHandler : IEnumerable<Diagnostic> {
