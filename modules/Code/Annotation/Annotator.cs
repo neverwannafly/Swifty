@@ -17,6 +17,9 @@ namespace swifty.Code.Annotation {
             var expression = annotator.AnnotateExpression(syntax.Expression);
             var symbols = annotator._scope.GetDeclaredVariables();
             var diagnostics = annotator.Diagnostics.ToImmutableArray();
+            if (previous != null) {
+                diagnostics = diagnostics.InsertRange(0, previous.Diagnostics);
+            }
             return new AnnotationGlobalScope(previous, diagnostics, symbols, expression);
         }
         private static AnnotationScope CreateParentScope(AnnotationGlobalScope previous) {
