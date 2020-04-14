@@ -22,6 +22,8 @@ namespace swifty.Code.Syntaxt {
         // Keywords
         TrueKeyword,
         FalseKeyword,
+        // Nodes
+        CompilationUnit,
         // Expressions
         LiteralExpression,
         BinaryExpression,

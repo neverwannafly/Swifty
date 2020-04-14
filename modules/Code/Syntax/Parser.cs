@@ -38,10 +38,10 @@ namespace swifty.Code.Syntaxt {
             _diagnostics.ReportUnexpectedToken(Current.Span, kind, Current.Kind);
             return new SyntaxToken(kind, Current.Position, null, null);
         }
-        public SyntaxTree Parse() {
+        public CompilationUnitSyntax ParseCompilationUnit() {
             var expression = ParseExpression();
             var endofFileToken = MatchToken(SyntaxKind.EndofFileToken);
-            return new SyntaxTree(_text, _diagnostics ,expression, endofFileToken);
+            return new CompilationUnitSyntax(expression, endofFileToken);
         }
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
             return ParseAssignmentExpression();
