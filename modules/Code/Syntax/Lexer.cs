@@ -84,7 +84,7 @@ namespace swifty.Code.Syntaxt {
                 case ':' : {
                     if (LookAhead=='=') {
                         _position += 2;
-                        return new SyntaxToken(SyntaxKind.AssignmentToken, _position-1, ":=", null);
+                        return new SyntaxToken(SyntaxKind.AssignmentToken, _position-2, ":=", null);
                     }
                     break;
                 }

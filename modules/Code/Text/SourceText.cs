@@ -24,7 +24,7 @@ namespace swifty.Code.Text {
                     lineStart = position;
                 }
             }
-            if (position > lineStart) {
+            if (position >= lineStart) {
                 AddLine(sourceText, position, lineStart, 0, result);
             }
             return result.ToImmutable();
