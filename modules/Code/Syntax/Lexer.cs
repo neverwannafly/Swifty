@@ -43,6 +43,12 @@ namespace swifty.Code.Syntaxt {
                 int len = _position - start;
                 string text = _text.ToString(start, len);
                 var kind = SyntaxRules.GetKeywordKind(text);
+                if (kind==SyntaxKind.IntKeyword) {
+                    return new SyntaxToken(kind, start, text, null, typeof(int));
+                }
+                if (kind==SyntaxKind.BoolKeyword) {
+                    return new SyntaxToken(kind, start, text, null, typeof(bool));
+                }
                 return new SyntaxToken(kind, start, text, null);
             }
             switch(Current) {
