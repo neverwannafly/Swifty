@@ -51,7 +51,17 @@ namespace swifty.Code.Syntaxt {
             if (Current.Kind == SyntaxKind.OpenBraceToken) {
                 return ParseBlockStatement();
             }
+            if (Current.Kind == SyntaxKind.IntKeyword || Current.Kind == SyntaxKind.BoolKeyword) {
+                return ParseVariableDeclaration();
+            }
             return ParseExpressionStatement();
+        }
+        private StatementSyntax ParseVariableDeclaration() {
+            var keyword = MatchToken(Current.Kind);
+            var identifier = MatchToken(SyntaxKind.IdentifierToken);
+            var assignmentToken = MatchToken(SyntaxKind.AssignmentToken);
+            var initializer = ParseExpression();
+            return new VariableDeclarationSyntax(keyword, identifier, assignmentToken, initializer);
         }
         private ExpressionSyntax ParseAssignmentExpression() {
             if (Current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind==SyntaxKind.AssignmentToken) {
