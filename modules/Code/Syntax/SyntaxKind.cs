@@ -26,6 +26,7 @@ namespace swifty.Code.Syntaxt {
         FalseKeyword,
         IntKeyword,
         BoolKeyword,
+        ConstKeyword,
         // Nodes
         CompilationUnit,
         // Statements
