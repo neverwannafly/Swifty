@@ -54,15 +54,27 @@ namespace swifty.Code.Annotation {
             switch(syntax.Kind) {
                 case SyntaxKind.BlockStatement: return AnnotateBlockStatement((BlockStatementSyntax)syntax);
                 case SyntaxKind.ExpressionStatement: return AnnotateExpressionStatement((ExpressionStatementSyntax)syntax);
+                case SyntaxKind.VariableDeclarationStatement: return AnnotateVariableDeclaration((VariableDeclarationSyntax)syntax);
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
         }
+        public AnnotatedStatement AnnotateVariableDeclaration(VariableDeclarationSyntax statement) {
+            var expression = AnnotateExpression(statement.Initializer);
+            var name = statement.Identifier.Text;
+            var variable = new VariableSymbol(name, expression.Type);
+            if (!_scope.TryDeclare(variable)) {
+                _diagnostics.ReportVariableAlreadyDeclared(statement.Identifier.Span, name);
+            }
+            return new AnnotateVariableDeclaration(variable, expression);
+        }
         private AnnotatedStatement AnnotateBlockStatement(BlockStatementSyntax statement) {
             var statements = ImmutableArray.CreateBuilder<AnnotatedStatement>();
+            _scope = new AnnotationScope(_scope);
             foreach (var statementSyntax in statement.Statements) {
                 var st =  AnnotateStatement(statementSyntax);
                 statements.Add(st);
             }
+            _scope = _scope.Parent;
             return new AnnotatedBlockStatement(statements.ToImmutable());
         }
         public AnnotatedStatement AnnotateExpressionStatement(ExpressionStatementSyntax statement) {
@@ -83,9 +95,11 @@ namespace swifty.Code.Annotation {
             var annotatedExpression = AnnotateExpression(syntax.Expression);
 
             if (!_scope.TryLookup(name, out var symbol)) {
-                symbol = new VariableSymbol(name, annotatedExpression.Type);
-                _scope.TryDeclare(symbol);
+                _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
+                return annotatedExpression;
             }
+
+            // check if variable is readonly and dont assign anything
 
             if (annotatedExpression.Type != symbol.Type) {
                 _diagnostics.ReportCannotConvert(syntax.Expression.Span, annotatedExpression.Type, symbol.Type);
