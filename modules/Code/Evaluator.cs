@@ -26,6 +26,12 @@ namespace swifty.Code {
                 _lastValue = EvaluateExpression(e.Expression);
                 return;
             }
+            if (statement is AnnotateVariableDeclaration v) {
+                var value = EvaluateExpression(v.Initializer);
+                _symbolTable[v.Variable] = value;
+                _lastValue = value;
+                return;
+            }
             throw new Exception($"Unexpected node {statement.Kind}");
         }
         private object EvaluateExpression(AnnotatedExpression root) {
