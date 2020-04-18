@@ -24,11 +24,14 @@ namespace swifty.Code.Syntaxt {
         // Keywords
         TrueKeyword,
         FalseKeyword,
+        IntKeyword,
+        BoolKeyword,
         // Nodes
         CompilationUnit,
         // Statements
         BlockStatement,
         ExpressionStatement,
+        VariableDeclarationStatement,
         // Expressions
         LiteralExpression,
         BinaryExpression,

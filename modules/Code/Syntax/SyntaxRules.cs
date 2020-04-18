@@ -29,6 +29,8 @@ namespace swifty.Code.Syntaxt {
             switch(text) {
                 case "true": return SyntaxKind.TrueKeyword;
                 case "false": return SyntaxKind.FalseKeyword;
+                case "int": return SyntaxKind.IntKeyword;
+                case "bool": return SyntaxKind.BoolKeyword;
                 default: return SyntaxKind.IdentifierToken;
             }
         }
