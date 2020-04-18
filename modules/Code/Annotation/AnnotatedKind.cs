@@ -7,5 +7,6 @@ namespace swifty.Code.Annotation {
         AssignmentExpression,
         BlockStatement,
         ExpressionStatement,
+        VariableDeclaration,
     }
 }
