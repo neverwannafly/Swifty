@@ -41,6 +41,8 @@ namespace swifty.Code.Syntaxt {
                 case "if": return SyntaxKind.IfKeyword;
                 case "else": return SyntaxKind.ElseKeyword;
                 case "while": return SyntaxKind.WhileKeyword;
+                case "for": return SyntaxKind.ForKeyword;
+                case "to": return SyntaxKind.ToKeyword;
                 default: return SyntaxKind.IdentifierToken;
             }
         }

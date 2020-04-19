@@ -63,11 +63,25 @@ namespace swifty.Code.Annotation {
                 case SyntaxKind.ExpressionStatement: return AnnotateExpressionStatement((ExpressionStatementSyntax)syntax);
                 case SyntaxKind.VariableDeclarationStatement: return AnnotateVariableDeclaration((VariableDeclarationSyntax)syntax);
                 case SyntaxKind.IfStatementSyntax: return AnnotateIfStatement((IfStatementSyntax)syntax);
-                case SyntaxKind.WhileStatementSyntax: return AnnotatedWhileStatement((WhileStatementSyntax)syntax);
+                case SyntaxKind.WhileStatementSyntax: return AnnotateWhileStatement((WhileStatementSyntax)syntax);
+                case SyntaxKind.ForStatementSyntax: return AnnotateForStatement((ForStatementSyntax)syntax);
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
         }
-        private AnnotatedStatement AnnotatedWhileStatement(WhileStatementSyntax statement) {
+        private AnnotatedStatement AnnotateForStatement(ForStatementSyntax statement) {
+            _scope = new AnnotationScope(_scope);
+
+            var lowerBound = AnnotateExpression(statement.LowerBound, typeof(int));
+            var upperBound = AnnotateExpression(statement.UpperBound, typeof(int));
+            var name = statement.Identifier.Text;
+            var variable = new VariableSymbol(name, typeof(int), false);
+            _scope.TryDeclare(variable);
+            var body = AnnotateStatement(statement.Body);
+            
+            _scope = _scope.Parent;
+            return new AnnotatedForStatement(variable, lowerBound, upperBound, body);
+        }
+        private AnnotatedStatement AnnotateWhileStatement(WhileStatementSyntax statement) {
             var condition = AnnotateExpression(statement.Condition, typeof(bool));
             var body = AnnotateStatement(statement.Body);
             return new AnnotatedWhileStatement(condition, body);

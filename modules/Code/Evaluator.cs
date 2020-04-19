@@ -47,6 +47,15 @@ namespace swifty.Code {
                 }
                 return;
             }
+            if (statement is AnnotatedForStatement f) {
+                var lowerBound = (int)EvaluateExpression(f.LowerBound);
+                var upperBound = (int)EvaluateExpression(f.UpperBound);
+                for (var idx=lowerBound; idx<upperBound; idx++) {
+                    _symbolTable[f.Variable] = idx;
+                    EvaluateStatement(f.Body);
+                }
+                return;
+            }
             throw new Exception($"Unexpected node {statement.Kind}");
         }
         private object EvaluateExpression(AnnotatedExpression root) {

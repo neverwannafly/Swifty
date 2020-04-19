@@ -36,6 +36,8 @@ namespace swifty.Code.Syntaxt {
         IfKeyword,
         ElseKeyword,
         WhileKeyword,
+        ForKeyword,
+        ToKeyword,
         // Nodes
         CompilationUnit,
         // Statements
@@ -45,6 +47,7 @@ namespace swifty.Code.Syntaxt {
         IfStatementSyntax,
         ElseClauseSyntax,
         WhileStatementSyntax,
+        ForStatementSyntax,
         // Expressions
         LiteralExpression,
         BinaryExpression,
