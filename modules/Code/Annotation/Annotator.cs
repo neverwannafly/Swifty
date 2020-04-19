@@ -61,7 +61,7 @@ namespace swifty.Code.Annotation {
         public AnnotatedStatement AnnotateVariableDeclaration(VariableDeclarationSyntax statement) {
             var expression = AnnotateExpression(statement.Initializer);
             var name = statement.Identifier.Text;
-            var variable = new VariableSymbol(name, expression.Type);
+            var variable = new VariableSymbol(name, expression.Type, statement.IsReadOnly);
             if (!_scope.TryDeclare(variable)) {
                 _diagnostics.ReportVariableAlreadyDeclared(statement.Identifier.Span, name);
             }
@@ -100,6 +100,10 @@ namespace swifty.Code.Annotation {
             }
 
             // check if variable is readonly and dont assign anything
+            if (symbol.IsReadOnly) {
+                _diagnostics.ReportVariableReadOnly(syntax.EqualToken.Span, syntax.IdentifierToken.Text);
+                return annotatedExpression;
+            }
 
             if (annotatedExpression.Type != symbol.Type) {
                 _diagnostics.ReportCannotConvert(syntax.Expression.Span, annotatedExpression.Type, symbol.Type);
