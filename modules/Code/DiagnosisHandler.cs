@@ -53,5 +53,9 @@ namespace swifty.Code {
             var message = $"Variable {name} is already declared.";
             Report(span, message);
         }
+        public void ReportVariableReadOnly(TextSpan span, string var) {
+            var message = $"Variable {var} is declared as readonly and hence cannot be reassigned";
+            Report(span, message);
+        }
     }
 }
