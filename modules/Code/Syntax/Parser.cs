@@ -125,8 +125,14 @@ namespace swifty.Code.Syntaxt {
             var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
             var openBrace = MatchToken(SyntaxKind.OpenBraceToken);
             while (Current.Kind != SyntaxKind.CloseBraceToken && Current.Kind != SyntaxKind.EndofFileToken) {
+                var startToken = Current;
+                
                 var statement = ParseStatement();
                 statements.Add(statement);
+                
+                if (Current == startToken) {
+                    NextToken();
+                }
             }
             var closeBrace = MatchToken(SyntaxKind.CloseBraceToken);
             return new BlockStatementSyntax(openBrace, statements.ToImmutable(), closeBrace);
