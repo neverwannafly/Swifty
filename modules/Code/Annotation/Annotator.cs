@@ -77,7 +77,7 @@ namespace swifty.Code.Annotation {
             var variable = new VariableSymbol(name, typeof(int), false);
             _scope.TryDeclare(variable);
             var body = AnnotateStatement(statement.Body);
-            
+
             _scope = _scope.Parent;
             return new AnnotatedForStatement(variable, lowerBound, upperBound, body);
         }
@@ -117,6 +117,9 @@ namespace swifty.Code.Annotation {
         }
         public AnnotatedExpression AnnotateNameExpression(NameExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;
+            if (string.IsNullOrEmpty(name)) {
+                return new AnnotatedLiteralExpression(0);
+            }
             _scope.TryLookup(name, out var symbol);
             if (symbol == null) {
                 _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
