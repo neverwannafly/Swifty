@@ -2,6 +2,9 @@ namespace swifty.Code.Syntaxt {
     internal static class SyntaxRules {
         internal static int GetBinaryOperatorPrecendence(this SyntaxKind kind) {
             switch(kind) {
+                case SyntaxKind.OrToken:                return 6;
+                case SyntaxKind.AndToken:               return 6;
+                case SyntaxKind.XorToken:               return 6;
                 case SyntaxKind.DivideToken:            return 5;
                 case SyntaxKind.StarToken:              return 5;
                 case SyntaxKind.PlusToken:              return 4;
@@ -12,9 +15,8 @@ namespace swifty.Code.Syntaxt {
                 case SyntaxKind.LessThanEqualToken:     return 3;
                 case SyntaxKind.GreaterThanToken:       return 3;
                 case SyntaxKind.GreaterThanEqualToken:  return 3;
-                case SyntaxKind.LogicalAndToken:               return 2;
-                case SyntaxKind.XorToken:        return 2;
-                case SyntaxKind.LogicalOrToken:                return 1;
+                case SyntaxKind.LogicalAndToken:        return 2;
+                case SyntaxKind.LogicalOrToken:         return 1;
                 default:                                return 0;
             }
         }

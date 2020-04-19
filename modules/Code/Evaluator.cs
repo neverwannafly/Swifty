@@ -72,6 +72,8 @@ namespace swifty.Code {
                     case AnnotatedBinaryOperatorKind.LogicalAnd : return (bool)left && (bool)right;
                     case AnnotatedBinaryOperatorKind.LogicalOr: return (bool)left || (bool)right;
                     case AnnotatedBinaryOperatorKind.Xor: return (int)left ^ (int)right;
+                    case AnnotatedBinaryOperatorKind.And: return (int)left & (int)right;
+                    case AnnotatedBinaryOperatorKind.Or: return (int)left | (int)right;
                     case AnnotatedBinaryOperatorKind.Equality: return Equals(left, right);
                     case AnnotatedBinaryOperatorKind.Inequality:
                     return !Equals(left, right);

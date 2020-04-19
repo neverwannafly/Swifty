@@ -101,14 +101,14 @@ namespace swifty.Code.Syntaxt {
                         _position += 2;
                         return new SyntaxToken(SyntaxKind.LogicalAndToken, _position-2, "&&", null);
                     }
-                    break;
+                    return new SyntaxToken(SyntaxKind.AndToken, _position++, "&", null);
                 }
                 case '|': {
                     if (LookAhead=='|') { 
                         _position += 2;
                         return new SyntaxToken(SyntaxKind.LogicalOrToken, _position-2, "||", null);
                     }
-                    break;
+                    return new SyntaxToken(SyntaxKind.OrToken, _position++, "|", null);
                 }
                 case '=' : {
                     if (LookAhead=='=') {

@@ -14,6 +14,8 @@ namespace swifty.Code.Syntaxt {
         LogicalOrToken,
         AssignmentToken,
         XorToken,
+        AndToken,
+        OrToken,
         LessThanToken,
         LessThanEqualToken,
         GreaterThanToken,

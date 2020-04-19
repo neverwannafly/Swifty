@@ -31,6 +31,8 @@ namespace swifty.Code.Annotation {
             new AnnotatedBinaryOperator(SyntaxKind.LessThanToken, AnnotatedBinaryOperatorKind.LessThan, typeof(int), typeof(int), typeof(bool)),
             new AnnotatedBinaryOperator(SyntaxKind.GreaterThanToken, AnnotatedBinaryOperatorKind.GreaterThan, typeof(int), typeof(int), typeof(bool)),
             new AnnotatedBinaryOperator(SyntaxKind.XorToken, AnnotatedBinaryOperatorKind.Xor, typeof(int)), 
+            new AnnotatedBinaryOperator(SyntaxKind.AndToken, AnnotatedBinaryOperatorKind.And, typeof(int)),
+            new AnnotatedBinaryOperator(SyntaxKind.OrToken, AnnotatedBinaryOperatorKind.Or, typeof(int)),
         };
         public static AnnotatedBinaryOperator Annotate(SyntaxKind syntaxKind, Type leftType, Type rightType) {
             foreach (var op in _operators) {
