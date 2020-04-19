@@ -72,6 +72,23 @@ namespace swifty.Code.Syntaxt {
                 case '/':  return new SyntaxToken(SyntaxKind.DivideToken, _position++, "/", null);
                 case '(':  return new SyntaxToken(SyntaxKind.LeftParanthesisToken, _position++, "(", null);
                 case ')':  return new SyntaxToken(SyntaxKind.RightParanthesisToken, _position++, ")", null);
+                case '>': {
+                    if (LookAhead=='=') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.GreaterThanEqualToken, _position-2, ">=", null);
+                    }
+                    return new SyntaxToken(SyntaxKind.GreaterThanToken, _position++, ">", null);
+                }
+                case '<': {
+                    if (LookAhead=='=') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.LessThanEqualToken, _position-2, "<=", null);
+                    }
+                    return new SyntaxToken(SyntaxKind.LessThanToken, _position++, "<", null);
+                }
+                case '^' : {
+                    return new SyntaxToken(SyntaxKind.XorToken, _position++, "^", null);
+                }
                 case '!': { 
                     if (LookAhead=='=') {
                         _position += 2;
@@ -82,16 +99,16 @@ namespace swifty.Code.Syntaxt {
                 case '&': {
                     if (LookAhead=='&') { 
                         _position += 2;
-                        return new SyntaxToken(SyntaxKind.AndToken, _position-2, "&&", null);
+                        return new SyntaxToken(SyntaxKind.LogicalAndToken, _position-2, "&&", null);
                     }
-                    break;
+                    return new SyntaxToken(SyntaxKind.AndToken, _position++, "&", null);
                 }
                 case '|': {
                     if (LookAhead=='|') { 
                         _position += 2;
-                        return new SyntaxToken(SyntaxKind.OrToken, _position-2, "||", null);
+                        return new SyntaxToken(SyntaxKind.LogicalOrToken, _position-2, "||", null);
                     }
-                    break;
+                    return new SyntaxToken(SyntaxKind.OrToken, _position++, "|", null);
                 }
                 case '=' : {
                     if (LookAhead=='=') {

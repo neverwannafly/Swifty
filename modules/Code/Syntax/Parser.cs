@@ -54,7 +54,47 @@ namespace swifty.Code.Syntaxt {
             if (Current.Kind == SyntaxKind.ConstKeyword || Current.Kind == SyntaxKind.IntKeyword || Current.Kind == SyntaxKind.BoolKeyword) {
                 return ParseVariableDeclaration();
             }
+            if (Current.Kind == SyntaxKind.IfKeyword) {
+                return ParseIfStatement();
+            }
+            if (Current.Kind == SyntaxKind.WhileKeyword) {
+                return ParseWhileStatement();
+            }
+            if (Current.Kind == SyntaxKind.ForKeyword) {
+                return ParseForStatement();
+            }
             return ParseExpressionStatement();
+        }
+        private StatementSyntax ParseForStatement() {
+            var keyword = MatchToken(SyntaxKind.ForKeyword);
+            var identifier = MatchToken(SyntaxKind.IdentifierToken);
+            var equalsToken = MatchToken(SyntaxKind.AssignmentToken);
+            var lowerBound = ParseExpression();
+            var toKeyword = MatchToken(SyntaxKind.ToKeyword);
+            var upperBound = ParseExpression();
+            var body = ParseStatement();
+            return new ForStatementSyntax(keyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
+        }
+        private StatementSyntax ParseWhileStatement() {
+            var keyword = MatchToken(SyntaxKind.WhileKeyword);
+            var condition = ParseExpression();
+            var body = ParseStatement();
+            return new WhileStatementSyntax(keyword, condition, body);
+        }
+        private StatementSyntax ParseIfStatement() {
+            var keyword = MatchToken(SyntaxKind.IfKeyword);
+            var condition = ParseExpression();
+            var statement = ParseStatement();
+            var elseClause = ParseOptionalElseClause();
+            return new IfStatementSyntax(keyword, condition, statement, elseClause);
+        }
+        private ElseClauseSyntax ParseOptionalElseClause() {
+            if (Current.Kind != SyntaxKind.ElseKeyword) {
+                return null;
+            }
+            var keyword = NextToken();
+            var statement = ParseStatement();
+            return new ElseClauseSyntax(keyword, statement);
         }
         private StatementSyntax ParseVariableDeclaration() {
             var keyword = MatchToken(Current.Kind); 
@@ -85,8 +125,14 @@ namespace swifty.Code.Syntaxt {
             var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
             var openBrace = MatchToken(SyntaxKind.OpenBraceToken);
             while (Current.Kind != SyntaxKind.CloseBraceToken && Current.Kind != SyntaxKind.EndofFileToken) {
+                var startToken = Current;
+                
                 var statement = ParseStatement();
                 statements.Add(statement);
+                
+                if (Current == startToken) {
+                    NextToken();
+                }
             }
             var closeBrace = MatchToken(SyntaxKind.CloseBraceToken);
             return new BlockStatementSyntax(openBrace, statements.ToImmutable(), closeBrace);

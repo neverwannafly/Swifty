@@ -32,6 +32,30 @@ namespace swifty.Code {
                 _lastValue = value;
                 return;
             }
+            if (statement is AnnotatedIfStatement i) {
+                var condition = (bool)EvaluateExpression(i.Condition);
+                if (condition) {
+                    EvaluateStatement(i.ThenStatement);
+                } else if (i.ElseStatement!=null) {
+                    EvaluateStatement(i.ElseStatement);
+                }
+                return;
+            }
+            if (statement is AnnotatedWhileStatement w) {
+                while ((bool)EvaluateExpression(w.Condition)) {
+                    EvaluateStatement(w.Body);
+                }
+                return;
+            }
+            if (statement is AnnotatedForStatement f) {
+                var lowerBound = (int)EvaluateExpression(f.LowerBound);
+                var upperBound = (int)EvaluateExpression(f.UpperBound);
+                for (var idx=lowerBound; idx<upperBound; idx++) {
+                    _symbolTable[f.Variable] = idx;
+                    EvaluateStatement(f.Body);
+                }
+                return;
+            }
             throw new Exception($"Unexpected node {statement.Kind}");
         }
         private object EvaluateExpression(AnnotatedExpression root) {
@@ -71,9 +95,16 @@ namespace swifty.Code {
                     }
                     case AnnotatedBinaryOperatorKind.LogicalAnd : return (bool)left && (bool)right;
                     case AnnotatedBinaryOperatorKind.LogicalOr: return (bool)left || (bool)right;
+                    case AnnotatedBinaryOperatorKind.Xor: return (int)left ^ (int)right;
+                    case AnnotatedBinaryOperatorKind.And: return (int)left & (int)right;
+                    case AnnotatedBinaryOperatorKind.Or: return (int)left | (int)right;
                     case AnnotatedBinaryOperatorKind.Equality: return Equals(left, right);
                     case AnnotatedBinaryOperatorKind.Inequality:
                     return !Equals(left, right);
+                    case AnnotatedBinaryOperatorKind.GreaterThan: return (int)left > (int)right;
+                    case AnnotatedBinaryOperatorKind.GreaterThanEqual: return (int)left >= (int)right;
+                    case AnnotatedBinaryOperatorKind.LessThan: return (int)left < (int)right;
+                    case AnnotatedBinaryOperatorKind.LessThanEqual: return (int)left <= (int)right;
                     default: throw new Exception($"Unexpected binary operator {b.Operator.Kind}");
                 }
             }

@@ -50,13 +50,47 @@ namespace swifty.Code.Annotation {
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
         }
+        public AnnotatedExpression AnnotateExpression(ExpressionSyntax syntax, Type targetType) {
+            var result = AnnotateExpression(syntax);
+            if (result.Type != targetType) {
+                _diagnostics.ReportCannotConvert(syntax.Span, result.Type, targetType);
+            }
+            return result;
+        }
         public AnnotatedStatement AnnotateStatement(StatementSyntax syntax) {
             switch(syntax.Kind) {
                 case SyntaxKind.BlockStatement: return AnnotateBlockStatement((BlockStatementSyntax)syntax);
                 case SyntaxKind.ExpressionStatement: return AnnotateExpressionStatement((ExpressionStatementSyntax)syntax);
                 case SyntaxKind.VariableDeclarationStatement: return AnnotateVariableDeclaration((VariableDeclarationSyntax)syntax);
+                case SyntaxKind.IfStatementSyntax: return AnnotateIfStatement((IfStatementSyntax)syntax);
+                case SyntaxKind.WhileStatementSyntax: return AnnotateWhileStatement((WhileStatementSyntax)syntax);
+                case SyntaxKind.ForStatementSyntax: return AnnotateForStatement((ForStatementSyntax)syntax);
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
+        }
+        private AnnotatedStatement AnnotateForStatement(ForStatementSyntax statement) {
+            _scope = new AnnotationScope(_scope);
+
+            var lowerBound = AnnotateExpression(statement.LowerBound, typeof(int));
+            var upperBound = AnnotateExpression(statement.UpperBound, typeof(int));
+            var name = statement.Identifier.Text;
+            var variable = new VariableSymbol(name, typeof(int), false);
+            _scope.TryDeclare(variable);
+            var body = AnnotateStatement(statement.Body);
+
+            _scope = _scope.Parent;
+            return new AnnotatedForStatement(variable, lowerBound, upperBound, body);
+        }
+        private AnnotatedStatement AnnotateWhileStatement(WhileStatementSyntax statement) {
+            var condition = AnnotateExpression(statement.Condition, typeof(bool));
+            var body = AnnotateStatement(statement.Body);
+            return new AnnotatedWhileStatement(condition, body);
+        }
+        private AnnotatedStatement AnnotateIfStatement(IfStatementSyntax statement) {
+            var condition = AnnotateExpression(statement.Condition, typeof(bool));
+            var thenStatement = AnnotateStatement(statement.ThenStatement);
+            var elseStatement = statement.ElseClause == null ? null : AnnotateStatement(statement.ElseClause.ElseStatement);
+            return new AnnotatedIfStatement(condition, thenStatement, elseStatement) ;
         }
         public AnnotatedStatement AnnotateVariableDeclaration(VariableDeclarationSyntax statement) {
             var expression = AnnotateExpression(statement.Initializer);
@@ -83,6 +117,9 @@ namespace swifty.Code.Annotation {
         }
         public AnnotatedExpression AnnotateNameExpression(NameExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;
+            if (string.IsNullOrEmpty(name)) {
+                return new AnnotatedLiteralExpression(0);
+            }
             _scope.TryLookup(name, out var symbol);
             if (symbol == null) {
                 _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);

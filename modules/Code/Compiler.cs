@@ -8,8 +8,8 @@ using System.Threading;
 namespace swifty.Code {
     public sealed class Compiler {
         private AnnotationGlobalScope _global;
-        public Compiler(SyntaxTree syntax) {
-            Syntax = syntax;
+        public Compiler(SyntaxTree syntax) : this(null, syntax) {
+            
         }
         private Compiler(Compiler prev, SyntaxTree syntax) {
             Previous = prev;
