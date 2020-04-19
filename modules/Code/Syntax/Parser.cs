@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using swifty.Code.Text;
+using System.Collections.Immutable;
 
 namespace swifty.Code.Syntaxt {
     internal sealed class Parser {
@@ -38,13 +39,34 @@ namespace swifty.Code.Syntaxt {
             _diagnostics.ReportUnexpectedToken(Current.Span, kind, Current.Kind);
             return new SyntaxToken(kind, Current.Position, null, null);
         }
-        public SyntaxTree Parse() {
-            var expression = ParseExpression();
+        public CompilationUnitSyntax ParseCompilationUnit() {
+            var statements = ParseStatement();
             var endofFileToken = MatchToken(SyntaxKind.EndofFileToken);
-            return new SyntaxTree(_text, _diagnostics ,expression, endofFileToken);
+            return new CompilationUnitSyntax(statements, endofFileToken);
         }
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
             return ParseAssignmentExpression();
+        }
+        private StatementSyntax ParseStatement() {
+            if (Current.Kind == SyntaxKind.OpenBraceToken) {
+                return ParseBlockStatement();
+            }
+            if (Current.Kind == SyntaxKind.ConstKeyword || Current.Kind == SyntaxKind.IntKeyword || Current.Kind == SyntaxKind.BoolKeyword) {
+                return ParseVariableDeclaration();
+            }
+            return ParseExpressionStatement();
+        }
+        private StatementSyntax ParseVariableDeclaration() {
+            var keyword = MatchToken(Current.Kind); 
+            bool isReadonly = false;
+            if (keyword.Kind == SyntaxKind.ConstKeyword) {
+                isReadonly = true;
+                keyword = MatchToken(Current.Kind);    
+            }
+            var identifier = MatchToken(SyntaxKind.IdentifierToken);
+            var assignmentToken = MatchToken(SyntaxKind.AssignmentToken);
+            var initializer = ParseExpression();
+            return new VariableDeclarationSyntax(keyword, identifier, assignmentToken, initializer, isReadonly);
         }
         private ExpressionSyntax ParseAssignmentExpression() {
             if (Current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind==SyntaxKind.AssignmentToken) {
@@ -54,6 +76,20 @@ namespace swifty.Code.Syntaxt {
                 return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
             }
             return ParseBinaryExpression();
+        }
+        private ExpressionStatementSyntax ParseExpressionStatement() {
+            var expression = ParseExpression();
+            return new ExpressionStatementSyntax(expression);
+        }
+        private BlockStatementSyntax ParseBlockStatement() {
+            var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
+            var openBrace = MatchToken(SyntaxKind.OpenBraceToken);
+            while (Current.Kind != SyntaxKind.CloseBraceToken && Current.Kind != SyntaxKind.EndofFileToken) {
+                var statement = ParseStatement();
+                statements.Add(statement);
+            }
+            var closeBrace = MatchToken(SyntaxKind.CloseBraceToken);
+            return new BlockStatementSyntax(openBrace, statements.ToImmutable(), closeBrace);
         }
         private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0) {
             ExpressionSyntax left;

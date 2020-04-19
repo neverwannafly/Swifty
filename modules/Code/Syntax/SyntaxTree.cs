@@ -5,24 +5,21 @@ using swifty.Code.Text;
 
 namespace swifty.Code.Syntaxt {
     public sealed class SyntaxTree {
-        public SyntaxTree(SourceText sourceText, IEnumerable<Diagnostic> diagnostics, ExpressionSyntax root, SyntaxToken endofFileToken) {
+        private SyntaxTree(SourceText sourceText) {
+            var parser = new Parser(sourceText);
+            Root = parser.ParseCompilationUnit();
+            Diagnostics = parser.Diagnostics.ToArray();
             SourceText = sourceText;
-            Diagnostics = diagnostics.ToArray();
-            Root = root;
-            EndofFileToken = endofFileToken;
         }
         public SourceText SourceText {get;}
         public IReadOnlyList<Diagnostic> Diagnostics {get;}
-        public ExpressionSyntax Root {get;}
-        public SyntaxToken EndofFileToken {get;}
+        public CompilationUnitSyntax Root {get;}
         public static SyntaxTree Parse(string text) {
             var sourceText = SourceText.From(text);
             return Parse(sourceText);
-            
         }
         private static SyntaxTree Parse(SourceText sourceText) {
-            var parser = new Parser(sourceText);
-            return parser.Parse();
+            return new SyntaxTree(sourceText);
         }
         public static IEnumerable<SyntaxToken> ParseToken(string text) {
             var sourceText = SourceText.From(text);

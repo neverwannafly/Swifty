@@ -21,30 +21,49 @@ namespace swifty.Code.Syntaxt {
         }
         public SyntaxToken Lex() {
             if (char.IsWhiteSpace(Current)) {
-                int start = _position;
-                while (char.IsWhiteSpace(Current)) Next();
-                int len = _position - start;
-                string text = _text.ToString(start, len);
-                return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
+                return ReadWhiteSpace();
             }
             if (char.IsDigit(Current)) {
-                int start = _position;
-                while (char.IsDigit(Current)) Next();
-                int len = _position - start;
-                string text = _text.ToString(start, len);
-                if (!int.TryParse(text, out var value)){
-                    _diagnostics.ReportInvalidNumber(new TextSpan(start, len), text, typeof(int));
-                };
-                return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
+                return ReadNumber();
             }
             if (char.IsLetter(Current)) {
-                int start = _position;
-                while (char.IsLetter(Current)) Next();
-                int len = _position - start;
-                string text = _text.ToString(start, len);
-                var kind = SyntaxRules.GetKeywordKind(text);
-                return new SyntaxToken(kind, start, text, null);
+                return ReadString();
             }
+            return ReadOperators();
+        }
+        private SyntaxToken ReadWhiteSpace() {
+            int start = _position;
+            while (char.IsWhiteSpace(Current)) Next();
+            int len = _position - start;
+            string text = _text.ToString(start, len);
+            return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
+        }
+        private SyntaxToken ReadNumber() {
+            int start = _position;
+            while (char.IsDigit(Current)) Next();
+            int len = _position - start;
+            string text = _text.ToString(start, len);
+            if (!int.TryParse(text, out var value)){
+                _diagnostics.ReportInvalidNumber(new TextSpan(start, len), text, typeof(int));
+            };
+            return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
+        }
+        private SyntaxToken ReadString() {
+            int start = _position;
+            while (char.IsLetter(Current)) Next();
+            int len = _position - start;
+            string text = _text.ToString(start, len);
+            var kind = SyntaxRules.GetKeywordKind(text);
+            return ReadKeywordOrIdentifier(kind, start, text);
+        }
+        private SyntaxToken ReadKeywordOrIdentifier(SyntaxKind kind, int start, string text) {
+            switch(kind) {
+                case SyntaxKind.IntKeyword: return new SyntaxToken(kind, start, text, null, typeof(int));
+                case SyntaxKind.BoolKeyword: return new SyntaxToken(kind, start, text, null, typeof(bool));
+                default: return new SyntaxToken(kind, start, text, null);
+            }
+        }
+        private SyntaxToken ReadOperators() {
             switch(Current) {
                 case '\0': return new SyntaxToken(SyntaxKind.EndofFileToken, _position++, "", null);
                 case '+':  return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
@@ -87,6 +106,12 @@ namespace swifty.Code.Syntaxt {
                         return new SyntaxToken(SyntaxKind.AssignmentToken, _position-2, ":=", null);
                     }
                     break;
+                }
+                case '{' : {
+                    return new SyntaxToken(SyntaxKind.OpenBraceToken, _position++, "{", null);
+                }
+                case '}' : {
+                    return new SyntaxToken(SyntaxKind.CloseBraceToken, _position++, "}", null);
                 }
             }
             _diagnostics.ReportBadCharacter(_position, Current);
