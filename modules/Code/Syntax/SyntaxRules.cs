@@ -40,6 +40,7 @@ namespace swifty.Code.Syntaxt {
                 case "const": return SyntaxKind.ConstKeyword;
                 case "if": return SyntaxKind.IfKeyword;
                 case "else": return SyntaxKind.ElseKeyword;
+                case "while": return SyntaxKind.WhileKeyword;
                 default: return SyntaxKind.IdentifierToken;
             }
         }

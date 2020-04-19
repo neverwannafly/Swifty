@@ -63,8 +63,14 @@ namespace swifty.Code.Annotation {
                 case SyntaxKind.ExpressionStatement: return AnnotateExpressionStatement((ExpressionStatementSyntax)syntax);
                 case SyntaxKind.VariableDeclarationStatement: return AnnotateVariableDeclaration((VariableDeclarationSyntax)syntax);
                 case SyntaxKind.IfStatementSyntax: return AnnotateIfStatement((IfStatementSyntax)syntax);
+                case SyntaxKind.WhileStatementSyntax: return AnnotatedWhileStatement((WhileStatementSyntax)syntax);
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
+        }
+        private AnnotatedStatement AnnotatedWhileStatement(WhileStatementSyntax statement) {
+            var condition = AnnotateExpression(statement.Condition, typeof(bool));
+            var body = AnnotateStatement(statement.Body);
+            return new AnnotatedWhileStatement(condition, body);
         }
         private AnnotatedStatement AnnotateIfStatement(IfStatementSyntax statement) {
             var condition = AnnotateExpression(statement.Condition, typeof(bool));

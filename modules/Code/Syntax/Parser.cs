@@ -57,7 +57,16 @@ namespace swifty.Code.Syntaxt {
             if (Current.Kind == SyntaxKind.IfKeyword) {
                 return ParseIfStatement();
             }
+            if (Current.Kind == SyntaxKind.WhileKeyword) {
+                return ParseWhileStatement();
+            }
             return ParseExpressionStatement();
+        }
+        private StatementSyntax ParseWhileStatement() {
+            var keyword = MatchToken(SyntaxKind.WhileKeyword);
+            var condition = ParseExpression();
+            var body = ParseStatement();
+            return new WhileStatementSyntax(keyword, condition, body);
         }
         private StatementSyntax ParseIfStatement() {
             var keyword = MatchToken(SyntaxKind.IfKeyword);

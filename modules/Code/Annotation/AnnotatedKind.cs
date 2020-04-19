@@ -9,5 +9,6 @@ namespace swifty.Code.Annotation {
         ExpressionStatement,
         VariableDeclaration,
         IfStatement,
+        WhileStatement,
     }
 }

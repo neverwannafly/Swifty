@@ -41,6 +41,12 @@ namespace swifty.Code {
                 }
                 return;
             }
+            if (statement is AnnotatedWhileStatement w) {
+                while ((bool)EvaluateExpression(w.Condition)) {
+                    EvaluateStatement(w.Body);
+                }
+                return;
+            }
             throw new Exception($"Unexpected node {statement.Kind}");
         }
         private object EvaluateExpression(AnnotatedExpression root) {
