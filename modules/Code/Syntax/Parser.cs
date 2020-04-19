@@ -54,7 +54,25 @@ namespace swifty.Code.Syntaxt {
             if (Current.Kind == SyntaxKind.ConstKeyword || Current.Kind == SyntaxKind.IntKeyword || Current.Kind == SyntaxKind.BoolKeyword) {
                 return ParseVariableDeclaration();
             }
+            if (Current.Kind == SyntaxKind.IfKeyword) {
+                return ParseIfStatement();
+            }
             return ParseExpressionStatement();
+        }
+        private StatementSyntax ParseIfStatement() {
+            var keyword = MatchToken(SyntaxKind.IfKeyword);
+            var condition = ParseExpression();
+            var statement = ParseStatement();
+            var elseClause = ParseOptionalElseClause();
+            return new IfStatementSyntax(keyword, condition, statement, elseClause);
+        }
+        private ElseClauseSyntax ParseOptionalElseClause() {
+            if (Current.Kind != SyntaxKind.ElseKeyword) {
+                return null;
+            }
+            var keyword = NextToken();
+            var statement = ParseStatement();
+            return new ElseClauseSyntax(keyword, statement);
         }
         private StatementSyntax ParseVariableDeclaration() {
             var keyword = MatchToken(Current.Kind); 

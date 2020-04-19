@@ -50,13 +50,27 @@ namespace swifty.Code.Annotation {
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
         }
+        public AnnotatedExpression AnnotateExpression(ExpressionSyntax syntax, Type targetType) {
+            var result = AnnotateExpression(syntax);
+            if (result.Type != targetType) {
+                _diagnostics.ReportCannotConvert(syntax.Span, result.Type, targetType);
+            }
+            return result;
+        }
         public AnnotatedStatement AnnotateStatement(StatementSyntax syntax) {
             switch(syntax.Kind) {
                 case SyntaxKind.BlockStatement: return AnnotateBlockStatement((BlockStatementSyntax)syntax);
                 case SyntaxKind.ExpressionStatement: return AnnotateExpressionStatement((ExpressionStatementSyntax)syntax);
                 case SyntaxKind.VariableDeclarationStatement: return AnnotateVariableDeclaration((VariableDeclarationSyntax)syntax);
+                case SyntaxKind.IfStatementSyntax: return AnnotateIfStatement((IfStatementSyntax)syntax);
                 default: throw new Exception($"Unexpected Syntax {syntax.Kind}");
             }
+        }
+        private AnnotatedStatement AnnotateIfStatement(IfStatementSyntax statement) {
+            var condition = AnnotateExpression(statement.Condition, typeof(bool));
+            var thenStatement = AnnotateStatement(statement.ThenStatement);
+            var elseStatement = statement.ElseClause == null ? null : AnnotateStatement(statement.ElseClause.ElseStatement);
+            return new AnnotatedIfStatement(condition, thenStatement, elseStatement) ;
         }
         public AnnotatedStatement AnnotateVariableDeclaration(VariableDeclarationSyntax statement) {
             var expression = AnnotateExpression(statement.Initializer);

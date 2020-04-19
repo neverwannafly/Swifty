@@ -32,6 +32,15 @@ namespace swifty.Code {
                 _lastValue = value;
                 return;
             }
+            if (statement is AnnotatedIfStatement i) {
+                var condition = (bool)EvaluateExpression(i.Condition);
+                if (condition) {
+                    EvaluateStatement(i.ThenStatement);
+                } else if (i.ElseStatement!=null) {
+                    EvaluateStatement(i.ElseStatement);
+                }
+                return;
+            }
             throw new Exception($"Unexpected node {statement.Kind}");
         }
         private object EvaluateExpression(AnnotatedExpression root) {

@@ -33,12 +33,16 @@ namespace swifty.Code.Syntaxt {
         IntKeyword,
         BoolKeyword,
         ConstKeyword,
+        IfKeyword,
+        ElseKeyword,
         // Nodes
         CompilationUnit,
         // Statements
         BlockStatement,
         ExpressionStatement,
         VariableDeclarationStatement,
+        IfStatementSyntax,
+        ElseClauseSyntax,
         // Expressions
         LiteralExpression,
         BinaryExpression,

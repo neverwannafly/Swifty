@@ -8,5 +8,6 @@ namespace swifty.Code.Annotation {
         BlockStatement,
         ExpressionStatement,
         VariableDeclaration,
+        IfStatement,
     }
 }

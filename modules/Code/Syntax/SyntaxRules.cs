@@ -38,6 +38,8 @@ namespace swifty.Code.Syntaxt {
                 case "int": return SyntaxKind.IntKeyword;
                 case "bool": return SyntaxKind.BoolKeyword;
                 case "const": return SyntaxKind.ConstKeyword;
+                case "if": return SyntaxKind.IfKeyword;
+                case "else": return SyntaxKind.ElseKeyword;
                 default: return SyntaxKind.IdentifierToken;
             }
         }
