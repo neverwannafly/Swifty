@@ -23,10 +23,14 @@ namespace swifty.Code.Annotation {
             new AnnotatedBinaryOperator(SyntaxKind.DivideToken, AnnotatedBinaryOperatorKind.Division, typeof(int)),
             new AnnotatedBinaryOperator(SyntaxKind.EqualToken, AnnotatedBinaryOperatorKind.Equality, typeof(int), typeof(int), typeof(bool)),
             new AnnotatedBinaryOperator(SyntaxKind.NotEqualToken, AnnotatedBinaryOperatorKind.Inequality, typeof(int), typeof(int), typeof(bool)),
-            new AnnotatedBinaryOperator(SyntaxKind.EqualToken, AnnotatedBinaryOperatorKind.Equality, typeof(bool)),
-            new AnnotatedBinaryOperator(SyntaxKind.NotEqualToken, AnnotatedBinaryOperatorKind.Inequality, typeof(bool)),
-            new AnnotatedBinaryOperator(SyntaxKind.AndToken, AnnotatedBinaryOperatorKind.LogicalAnd, typeof(bool)),
-            new AnnotatedBinaryOperator(SyntaxKind.OrToken, AnnotatedBinaryOperatorKind.LogicalOr, typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.NotEqualToken, AnnotatedBinaryOperatorKind.Inequality, typeof(int), typeof(int), typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.LogicalAndToken, AnnotatedBinaryOperatorKind.LogicalAnd, typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.LogicalOrToken, AnnotatedBinaryOperatorKind.LogicalOr, typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.LessThanEqualToken, AnnotatedBinaryOperatorKind.LessThanEqual, typeof(int), typeof(int), typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.GreaterThanEqualToken, AnnotatedBinaryOperatorKind.GreaterThanEqual, typeof(int), typeof(int), typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.LessThanToken, AnnotatedBinaryOperatorKind.LessThan, typeof(int), typeof(int), typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.GreaterThanToken, AnnotatedBinaryOperatorKind.GreaterThan, typeof(int), typeof(int), typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.XorToken, AnnotatedBinaryOperatorKind.Xor, typeof(int)), 
         };
         public static AnnotatedBinaryOperator Annotate(SyntaxKind syntaxKind, Type leftType, Type rightType) {
             foreach (var op in _operators) {

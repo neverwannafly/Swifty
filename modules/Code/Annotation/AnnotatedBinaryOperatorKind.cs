@@ -8,6 +8,12 @@ namespace swifty.Code.Annotation {
         LogicalAnd,
         Equality,
         Inequality,
-        Logical
+        Or,
+        And,
+        Xor,
+        LessThanEqual,
+        LessThan,
+        GreaterThanEqual,
+        GreaterThan,
     }
 }
