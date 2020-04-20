@@ -42,19 +42,23 @@ namespace swifty.Code {
             Report(span, message);
         }
         public void ReportUndefinedName(TextSpan span, string name) {
-            var message = $"Variable '{name}' doesnt exist.";
+            var message = $"SEMANTIC_ERROR: Variable '{name}' doesnt exist.";
             Report(span, message);
         }
         public void ReportCannotConvert(TextSpan span, Type type1, Type type2) {
-            var message = $"Cannot convert type {type1} to {type2}";
+            var message = $"SEMANTIC_ERROR: Cannot convert type '{type1}' to '{type2}'";
             Report(span, message);
         }
         public void ReportVariableAlreadyDeclared(TextSpan span, string name) {
-            var message = $"Variable {name} is already declared.";
+            var message = $"SEMANTIC_ERROR: Variable '{name}' is already declared.";
             Report(span, message);
         }
         public void ReportVariableReadOnly(TextSpan span, string var) {
-            var message = $"Variable {var} is declared as readonly and hence cannot be reassigned";
+            var message = $"SEMANTIC_ERROR: Variable '{var}' is declared as readonly and hence cannot be reassigned";
+            Report(span, message);
+        }
+        public void ReportInvalidRightValue(TextSpan span, string name, Type expected, Type actual) {
+            var message = $"SEMANTIC_ERROR: Inconsistent Lvalue and Rvalue for Variable '{name}', expected '{expected}' but got '{actual}'";
             Report(span, message);
         }
     }
