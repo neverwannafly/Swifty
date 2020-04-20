@@ -13,7 +13,7 @@ app.set('view engine', 'pug');
 
 app.get('/build', (req, res) => {
     let data = req.query.data;
-    data = data + '\n\n';
+    data = data;
     const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
     fs.writeFileSync('buffer.t', data);
     const child = exec(command);
