@@ -1,6 +1,19 @@
-var http = require('http');
+const express = require('express');
+const path = require('path');
 
-http.createServer(function (req, res) {
-    res.write('Hello World!');
-    res.end();
-}).listen(8080);
+const port = process.env.PORT || 3000;
+
+const app = express();
+
+app.use('/static', express.static(path.join(__dirname, 'public')));
+app.use('/modules', express.static(path.join(__dirname, 'node_modules')));
+app.set('view engine', 'pug');
+
+app.get('/', (req, res) => {
+    console.log(req);
+    res.render('home', {title:'Swifty Compiler'});
+});
+
+app.listen(port, () => 
+    console.log(`running on localhost:${port}`)
+);
