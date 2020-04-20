@@ -10,7 +10,6 @@ app.use('/modules', express.static(path.join(__dirname, 'node_modules')));
 app.set('view engine', 'pug');
 
 app.get('/', (req, res) => {
-    console.log(req);
     res.render('home', {title:'Swifty Compiler'});
 });
 
