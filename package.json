@@ -1,0 +1,20 @@
+{
+  "name": "swifty",
+  "version": "1.0.0",
+  "description": "Server that compiles swifty code in realtime",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neverwannafly/Swifty.git"
+  },
+  "author": "Shubham Anand",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neverwannafly/Swifty/issues"
+  },
+  "homepage": "https://github.com/neverwannafly/Swifty#readme"
+}
