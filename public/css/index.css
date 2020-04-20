@@ -1,0 +1,52 @@
+body {
+    background-color: black;
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    vertical-align: center;
+    flex-direction: column;
+    background-color: black;
+    height: 100%;
+    width: 80%;;
+}
+
+#header {
+    text-align: center;
+    margin-top: 8%;
+    color: wheat;
+    font-family: sans-serif;
+}
+
+#tooltip {
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    height: 30px;
+    background-color: black;
+}
+
+#editor {
+    padding: 10px;
+    background-color: black;
+}
+
+#run-icon {
+    height: 30px!important;
+    height: 30px!important;
+    margin-left: 5px;
+    /* border-radius: 50%; */
+}
+
+#build-icon {
+    height: 30px!important;
+    height: 30px!important;
+    /* border-radius: 50%; */
+    margin-left: 5px;
+}
+
+.CodeMirror {
+    height: 200px;
+}

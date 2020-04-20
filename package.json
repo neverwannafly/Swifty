@@ -16,5 +16,15 @@
   "bugs": {
     "url": "https://github.com/neverwannafly/Swifty/issues"
   },
-  "homepage": "https://github.com/neverwannafly/Swifty#readme"
+  "homepage": "https://github.com/neverwannafly/Swifty#readme",
+  "dependencies": {
+    "@popperjs/core": "^2.3.3",
+    "bootstrap": "^4.4.1",
+    "codemirror": "^5.52.2",
+    "express": "^4.17.1",
+    "jquery": "^3.5.0",
+    "nodemon": "^2.0.3",
+    "popper": "^1.0.1",
+    "pug": "^2.0.4"
+  }
 }
