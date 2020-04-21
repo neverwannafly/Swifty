@@ -18,6 +18,7 @@ $("#tree").children()[0].id = "tree-client";
 buildButton.addEventListener('click', function(){
     const code = editorClient.getValue();
     const lines = editorClient.lineCount();
+    reset();
     $.ajax({
         url: '/build',
         data: {
@@ -33,7 +34,6 @@ buildButton.addEventListener('click', function(){
                 text = text + `${data.error.join("\n")}`;
             }
             outputClient.setValue(text);
-            treeClient.setValue('');
         },
         error: function(err) {
             console.log(err);
@@ -44,6 +44,7 @@ buildButton.addEventListener('click', function(){
 runButton.addEventListener('click', function(){
     const code = editorClient.getValue();
     const lines = editorClient.lineCount();
+    reset();
     $.ajax({
         url: '/run',
         data: {
@@ -69,3 +70,8 @@ runButton.addEventListener('click', function(){
         }
     });
 });
+
+function reset() {
+    treeClient.setValue('');
+    outputClient.setValue('');
+}
