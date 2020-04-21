@@ -2,11 +2,18 @@ const express = require('express');
 const path = require('path');
 const exec = require('child_process').exec;
 const fs = require('fs');
+const rateLimit = require('express-rate-limit');
 const config = require('./config');
 
 const port = process.env.PORT || 3000;
 
 const app = express();
+const limiter = new rateLimit({
+    windowMs: 1*60*1000, // 1 minute
+    max: 120,
+});
+
+app.use(limiter);
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use('/modules', express.static(path.join(__dirname, 'node_modules')));
