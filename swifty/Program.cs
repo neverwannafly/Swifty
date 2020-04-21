@@ -119,6 +119,9 @@ namespace swifty {
 
             foreach (string input in lines) {
                 bool isBlank = String.IsNullOrWhiteSpace(input);
+                if (textBuilder.Length==0 && isBlank) {
+                    continue;
+                }
                 textBuilder.AppendLine(input);
                 var feed = textBuilder.ToString();
                 var syntaxTree = SyntaxTree.Parse(feed);
@@ -130,15 +133,11 @@ namespace swifty {
                 var diagnostics = result.Diagnostics;
                 logger.AddLog("syntaxTree", syntaxTree.Root.ToString());
                 if (!diagnostics.Any()) {
-                    if (lines.Last() == input) {
-                        logger.AddLog("compilationResult", "Compiled Successfully");
-                        logger.AddLog("result", result.Value.ToString());
-                    }
+                    logger.AddLog("compilationResult", "Compiled Successfully");
+                    logger.AddLog("result", result.Value.ToString());
                     prev = compiler;
                 } else {
-                    if (lines.Last() == input) {
-                        logger.AddLog("compilationResult", "Compilation Failed");
-                    }
+                    logger.AddLog("compilationResult", "Compilation Failed");
                     foreach(var diagnostic in diagnostics) {
                         int lineIndex = syntaxTree.SourceText.GetLineIndex(diagnostic.Span.Start);
                         var line = syntaxTree.SourceText;
