@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const exec = require('child_process').exec;
 const fs = require('fs');
+const config = require('./config');
 
 const port = process.env.PORT || 3000;
 
@@ -15,8 +16,8 @@ app.get('/build', (req, res) => {
     let data = req.query.data;
     if (data != '') {
         data = preprocessData(data);
-        const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
-        fs.writeFileSync('buffer.t', data);
+        const command = `${config.exec_path} --build`;
+        fs.writeFileSync(`${config.buffer_file}`, data);
         const child = exec(command);
         child.on('close', function(err, _){
             console.log(err);
@@ -33,8 +34,8 @@ app.get('/run', (req, res) => {
     let data = req.query.data;
     if (data != '') {
         data = preprocessData(data);
-        const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
-        fs.writeFileSync('buffer.t', data);
+        const command = `${config.exec_path} --build`;
+        fs.writeFileSync(`${config.buffer_file}`, data);
         const child = exec(command);
         child.on('close', function(err, _){
             console.log(err);
