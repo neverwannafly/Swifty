@@ -4,6 +4,8 @@ const editor = document.getElementById("editor");
 const output = document.getElementById("output")
 const tree = document.getElementById("tree")
 
+CodeMirror.defineSimpleMode('swifty-mode', swiftyMode);
+
 const editorClient = CodeMirror(editor, editorConfig);
 $("#editor").children()[0].id = "editor-client";
 
