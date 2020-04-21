@@ -13,31 +13,35 @@ app.set('view engine', 'pug');
 
 app.get('/build', (req, res) => {
     let data = req.query.data;
-    data = preprocessData(data);
-    const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
-    fs.writeFileSync('buffer.t', data);
-    const child = exec(command);
-    child.on('close', function(err, _){
-        console.log(err);
-        let result = JSON.parse(fs.readFileSync('result.json', 'utf8'));
-        res.send({
-            result: result.compilationResult,
-            error: result.error,
+    if (data != '') {
+        data = preprocessData(data);
+        const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
+        fs.writeFileSync('buffer.t', data);
+        const child = exec(command);
+        child.on('close', function(err, _){
+            console.log(err);
+            let result = JSON.parse(fs.readFileSync('result.json', 'utf8'));
+            res.send({
+                result: result.compilationResult,
+                error: result.error,
+            });
         });
-    });
+    }
 });
 
 app.get('/run', (req, res) => {
     let data = req.query.data;
-    data = preprocessData(data);
-    const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
-    fs.writeFileSync('buffer.t', data);
-    const child = exec(command);
-    child.on('close', function(err, _){
-        console.log(err);
-        let result = JSON.parse(fs.readFileSync('result.json', 'utf8'));
-        res.send(result);
-    });
+    if (data != '') {
+        data = preprocessData(data);
+        const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
+        fs.writeFileSync('buffer.t', data);
+        const child = exec(command);
+        child.on('close', function(err, _){
+            console.log(err);
+            let result = JSON.parse(fs.readFileSync('result.json', 'utf8'));
+            res.send(result);
+        });
+    }
 });
 
 app.get('/', (_, res) => {
