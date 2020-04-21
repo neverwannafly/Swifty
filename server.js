@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const exec = require('child_process').exec;
 const fs = require('fs');
+const config = require('./config');
 
 const port = process.env.PORT || 3000;
 
@@ -13,15 +14,35 @@ app.set('view engine', 'pug');
 
 app.get('/build', (req, res) => {
     let data = req.query.data;
-    data = data;
-    const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
-    fs.writeFileSync('buffer.t', data);
-    const child = exec(command);
-    child.on('close', function(err, _){
-        console.log(err);
-        let result = JSON.parse(fs.readFileSync('result.json', 'utf8'));
-        res.send(result);
-    });
+    if (data != '') {
+        data = preprocessData(data);
+        const command = `${config.exec_path} --build`;
+        fs.writeFileSync(`${config.buffer_file}`, data);
+        const child = exec(command);
+        child.on('close', function(err, _){
+            console.log(err);
+            let result = JSON.parse(fs.readFileSync('result.json', 'utf8'));
+            res.send({
+                result: result.compilationResult,
+                error: result.error,
+            });
+        });
+    }
+});
+
+app.get('/run', (req, res) => {
+    let data = req.query.data;
+    if (data != '') {
+        data = preprocessData(data);
+        const command = `${config.exec_path} --build`;
+        fs.writeFileSync(`${config.buffer_file}`, data);
+        const child = exec(command);
+        child.on('close', function(err, _){
+            console.log(err);
+            let result = JSON.parse(fs.readFileSync('result.json', 'utf8'));
+            res.send(result);
+        });
+    }
 });
 
 app.get('/', (_, res) => {
@@ -31,3 +52,16 @@ app.get('/', (_, res) => {
 app.listen(port, () => 
     console.log(`running on localhost:${port}`)
 );
+
+function preprocessData(data) {
+    let text = data.split("\n");
+    let newData = '';
+    for (let i=0; i<text.length; i++) {
+        if (text[i] === '') {
+            continue;
+        }
+        newData = (newData + text[i] + '\n');
+    }
+    newData = `{\n${newData}}\n\n`;
+    return newData;
+}

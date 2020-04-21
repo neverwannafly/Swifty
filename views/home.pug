@@ -11,14 +11,22 @@ html
         //- script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js")
     body
     div.container-fluid.wrapper
-        div#header.container-fluid 
-            h1 Weclome to swifty!
+        div.container-fluid 
+            h1.center.header SWIFTY
         div#tooltip.container-fluid
             button.fas.fa-hammer.fa-1x#build-icon.btn-sm.btn-success
             button.fas.fa-play.fa-1x#run-icon.btn-sm.btn-danger
         div#editor.container-fluid
+        div#result.container-fluid
+            div.container-fluid.fixed
+                h3.center.header Output
+                div#output.container-fluid
+            div.container-fluid.fixed
+                h3.center.header Parse Tree
+                div#tree.container-fluid
     script(src="modules/jquery/dist/jquery.min.js")
     script(src="modules/bootstrap/dist/js/bootstrap.min.js")
     script(src="/modules/codemirror/lib/codemirror.js")
+    script(src="modules/codemirror/addon/mode/simple.js")
     script(src="/static/js/config.js")
     script(src="/static/js/index.js")
