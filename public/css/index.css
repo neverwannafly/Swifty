@@ -54,15 +54,11 @@ body {
 #output-client {
     height: 150px;
     width: 100%;
-    overflow-x: scroll!important;
-    overflow-y: scroll!important;
 }
 
 #tree-client {
     height: 150px;
     width: 100%;
-    overflow-x: scroll!important;
-    overflow-y: scroll!important;
 }
 
 #result {
@@ -75,4 +71,10 @@ body {
     align-items: center;
     align-content: center;
     text-align: center;
+}
+
+.fixed {
+    width: 50%;
+    overflow-x: scroll!important;
+    overflow-y: scroll!important;
 }
