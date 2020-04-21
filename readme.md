@@ -1,7 +1,9 @@
 # SWIFTY
+[![Build Status](https://dev.azure.com/shubhamchess/Swifty/_apis/build/status/neverwannafly.Swifty?branchName=master)](https://dev.azure.com/shubhamchess/Swifty/_build/latest?definitionId=1&branchName=master)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/neverwannafly/Swifty.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/neverwannafly/Swifty/alerts/)
 
 ## CodeEditor Preview
-
+<p align="center"><img src="img/demo.png" alt="Swifty"></p>
 
 ## Syntax (Currently Supported)
 ```
