@@ -13,7 +13,7 @@ app.set('view engine', 'pug');
 
 app.get('/build', (req, res) => {
     let data = req.query.data;
-    data = `{\n${data}\n}\n\n`;
+    data = preprocessData(data);
     const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
     fs.writeFileSync('buffer.t', data);
     const child = exec(command);
@@ -29,7 +29,7 @@ app.get('/build', (req, res) => {
 
 app.get('/run', (req, res) => {
     let data = req.query.data;
-    data = `{\n${data}\n}\n\n`;
+    data = preprocessData(data);
     const command = "./swifty/bin/Release/netcoreapp3.1/osx-x64/publish/swifty --build";
     fs.writeFileSync('buffer.t', data);
     const child = exec(command);
@@ -47,3 +47,16 @@ app.get('/', (_, res) => {
 app.listen(port, () => 
     console.log(`running on localhost:${port}`)
 );
+
+function preprocessData(data) {
+    let text = data.split("\n");
+    let newData = '';
+    for (let i=0; i<text.length; i++) {
+        if (text[i] === '') {
+            continue;
+        }
+        newData = (newData + text[i] + '\n');
+    }
+    newData = `{\n${newData}}\n\n`;
+    return newData;
+}
