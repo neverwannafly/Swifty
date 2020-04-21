@@ -25,7 +25,7 @@ let swiftyMode =  {
         {regex: /\/\/.*/, token: "comment"},
         {regex: /\/(?:[^\\]|\\.)*?\//, token: "variable-3"},
         {regex: /\/\*/, token: "comment", next: "comment"},
-        {regex: /[-+\/:&!^}|{*=<>!]+/, token: "operator"},
+        {regex: /[-+\/:&!^}|{*=<>]+/, token: "operator"},
         {regex: /[\{\[\(]/, indent: true},
         {regex: /[\}\]\)]/, dedent: true},
         {regex: /[a-z$][\w$]*/, token: "variable"},
