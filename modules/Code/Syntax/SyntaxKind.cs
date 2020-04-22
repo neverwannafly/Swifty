@@ -14,6 +14,7 @@ namespace swifty.Code.Syntaxt {
         LogicalAndToken,
         LogicalOrToken,
         AssignmentToken,
+        TypeCastToken,
         XorToken,
         AndToken,
         OrToken,
@@ -57,5 +58,6 @@ namespace swifty.Code.Syntaxt {
         UnaryExpression,
         NameExpression,
         AssignmentExpression,
+        TypeCastExpression,
     }
 }

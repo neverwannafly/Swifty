@@ -41,6 +41,7 @@ namespace swifty.Code.Annotation {
         public DiagnosisHandler Diagnostics => _diagnostics;
         public AnnotatedExpression AnnotateExpression(ExpressionSyntax syntax) {
             switch(syntax.Kind) {
+                case SyntaxKind.TypeCastExpression: return AnnotateTypeCastExpression((TypeCastExpressionSyntax)syntax);
                 case SyntaxKind.BinaryExpression: return AnnotateBinaryExpression((BinaryExpressionSyntax)syntax);
                 case SyntaxKind.UnaryExpression: return AnnotateUnaryExpression((UnaryExpressionSyntax)syntax);
                 case SyntaxKind.LiteralExpression: return AnnotateLiteralExpression((LiteralExpressionSyntax)syntax);
@@ -121,6 +122,11 @@ namespace swifty.Code.Annotation {
         public AnnotatedStatement AnnotateExpressionStatement(ExpressionStatementSyntax statement) {
             var expression = AnnotateExpression(statement.Expression);
             return new AnnotatedExpressionStatement(expression);
+        }
+        private AnnotatedExpression AnnotateTypeCastExpression(TypeCastExpressionSyntax syntax) {
+            var left = AnnotateExpression(syntax.Operand);
+            var right = syntax.Type.Kind;
+            return new AnnotatedTypeCastExpression(left, right);
         }
         public AnnotatedExpression AnnotateNameExpression(NameExpressionSyntax syntax) {
             var name = syntax.IdentifierToken.Text;

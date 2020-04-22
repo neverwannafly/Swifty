@@ -104,12 +104,7 @@ namespace swifty.Code.Syntaxt {
                 constKeyword = NextToken();
             }
             bool isReadonly = (constKeyword==null ? false : true);
-            SyntaxToken datatypeKeyword;
-            switch(Current.Kind) {
-                case SyntaxKind.IntKeyword : datatypeKeyword = MatchToken(SyntaxKind.IntKeyword); break;
-                case SyntaxKind.BoolKeyword: datatypeKeyword = MatchToken(SyntaxKind.BoolKeyword); break;
-                default: datatypeKeyword = MatchToken(SyntaxKind.KeywordToken); break;
-            }
+            SyntaxToken datatypeKeyword = FetchDataType();
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var assignmentToken = MatchToken(SyntaxKind.AssignmentToken);
             var initializer = ParseExpression();
@@ -158,10 +153,24 @@ namespace swifty.Code.Syntaxt {
                 int precedence = Current.Kind.GetBinaryOperatorPrecendence();
                 if (precedence == 0 || precedence <= parentPrecedence) break;
                 SyntaxToken operatorToken = NextToken();
+                if (operatorToken.Kind == SyntaxKind.TypeCastToken) {
+                    SyntaxToken resultantType = FetchDataType();
+                    left = new TypeCastExpressionSyntax(left, operatorToken, resultantType);
+                    continue;
+                }
                 ExpressionSyntax right = ParseBinaryExpression(precedence);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
             return left;
+        }
+        private SyntaxToken FetchDataType(){
+            SyntaxToken keywordToken;
+            switch(Current.Kind) {
+                case SyntaxKind.IntKeyword : keywordToken = MatchToken(SyntaxKind.IntKeyword); break;
+                case SyntaxKind.BoolKeyword: keywordToken = MatchToken(SyntaxKind.BoolKeyword); break;
+                default: keywordToken = MatchToken(SyntaxKind.KeywordToken); break;
+            }
+            return keywordToken;
         }
         private ExpressionSyntax ParsePrimaryExpression() {
             switch(Current.Kind) {

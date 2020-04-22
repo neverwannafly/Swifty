@@ -2,6 +2,7 @@ namespace swifty.Code.Syntaxt {
     internal static class SyntaxRules {
         internal static int GetBinaryOperatorPrecendence(this SyntaxKind kind) {
             switch(kind) {
+                case SyntaxKind.TypeCastToken:          return 7;
                 case SyntaxKind.OrToken:                return 6;
                 case SyntaxKind.AndToken:               return 6;
                 case SyntaxKind.XorToken:               return 6;

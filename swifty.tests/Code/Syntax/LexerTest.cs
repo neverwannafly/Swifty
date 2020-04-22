@@ -81,12 +81,20 @@ namespace swifty.tests.Code.Syntax {
                 (SyntaxKind.LogicalAndToken, "&&"),
                 (SyntaxKind.LogicalOrToken, "||"),
                 (SyntaxKind.AssignmentToken, ":="),
-                // (SyntaxKind.XorToken, "^"),
+                (SyntaxKind.XorToken, "^"),
                 (SyntaxKind.LeftParanthesisToken, "("),
                 (SyntaxKind.RightParanthesisToken, ")"),
                 // Keywords
                 (SyntaxKind.TrueKeyword, "True"),
                 (SyntaxKind.FalseKeyword, "False"),
+                (SyntaxKind.ForKeyword, "for"),
+                (SyntaxKind.IfKeyword, "if"),
+                (SyntaxKind.ToKeyword, "to"),
+                (SyntaxKind.WhileKeyword, "while"),
+                (SyntaxKind.BoolKeyword, "bool"),
+                (SyntaxKind.ElseKeyword, "else"),
+                (SyntaxKind.IntKeyword, "int"),
+                (SyntaxKind.ConstKeyword, "const"),
             };
         }
         private static IEnumerable<(SyntaxKind  kind1, string text1, SyntaxKind  kind2, string text2)> GetTokenPair() {

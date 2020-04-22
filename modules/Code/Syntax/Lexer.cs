@@ -47,7 +47,6 @@ namespace swifty.Code.Syntaxt {
             while (Current != '\0' && Current != '\n') Next();
             int len = _position - start;
             string comment = _text.ToString(start, len);
-            Console.WriteLine(comment);
             return new SyntaxToken(SyntaxKind.CommentToken, start, comment, null);
         }
         private SyntaxToken ReadNumber() {
@@ -126,6 +125,10 @@ namespace swifty.Code.Syntaxt {
                     if (LookAhead=='=') {
                         _position += 2;
                         return new SyntaxToken(SyntaxKind.EqualToken, _position-2, "==", null);
+                    }
+                    if (LookAhead=='>') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.TypeCastToken, _position-2, "=>", null);
                     }
                     break;
                 }
