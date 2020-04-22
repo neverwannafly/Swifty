@@ -67,14 +67,15 @@ namespace swifty.Code.Syntaxt {
             return ParseExpressionStatement();
         }
         private StatementSyntax ParseForStatement() {
-            var keyword = MatchToken(SyntaxKind.ForKeyword);
+            var forKeyword = MatchToken(SyntaxKind.ForKeyword);
+            var intKeyword = MatchToken(SyntaxKind.IntKeyword);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var equalsToken = MatchToken(SyntaxKind.AssignmentToken);
             var lowerBound = ParseExpression();
             var toKeyword = MatchToken(SyntaxKind.ToKeyword);
             var upperBound = ParseExpression();
             var body = ParseStatement();
-            return new ForStatementSyntax(keyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
+            return new ForStatementSyntax(forKeyword, intKeyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
         }
         private StatementSyntax ParseWhileStatement() {
             var keyword = MatchToken(SyntaxKind.WhileKeyword);
@@ -98,16 +99,21 @@ namespace swifty.Code.Syntaxt {
             return new ElseClauseSyntax(keyword, statement);
         }
         private StatementSyntax ParseVariableDeclaration() {
-            var keyword = MatchToken(Current.Kind); 
-            bool isReadonly = false;
-            if (keyword.Kind == SyntaxKind.ConstKeyword) {
-                isReadonly = true;
-                keyword = MatchToken(Current.Kind);    
+            SyntaxToken constKeyword = null;
+            if (Current.Kind == SyntaxKind.ConstKeyword) {
+                constKeyword = NextToken();
+            }
+            bool isReadonly = (constKeyword==null ? false : true);
+            SyntaxToken datatypeKeyword;
+            switch(Current.Kind) {
+                case SyntaxKind.IntKeyword : datatypeKeyword = MatchToken(SyntaxKind.IntKeyword); break;
+                case SyntaxKind.BoolKeyword: datatypeKeyword = MatchToken(SyntaxKind.BoolKeyword); break;
+                default: datatypeKeyword = MatchToken(SyntaxKind.KeywordToken); break;
             }
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var assignmentToken = MatchToken(SyntaxKind.AssignmentToken);
             var initializer = ParseExpression();
-            return new VariableDeclarationSyntax(keyword, identifier, assignmentToken, initializer, isReadonly);
+            return new VariableDeclarationSyntax(constKeyword, datatypeKeyword, identifier, assignmentToken, initializer, isReadonly);
         }
         private ExpressionSyntax ParseAssignmentExpression() {
             if (Current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind==SyntaxKind.AssignmentToken) {

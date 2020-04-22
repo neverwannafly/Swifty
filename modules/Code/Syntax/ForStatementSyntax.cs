@@ -2,8 +2,9 @@ using System.Collections.Generic;
 
 namespace swifty.Code.Syntaxt {
     public sealed class ForStatementSyntax : StatementSyntax {
-        public ForStatementSyntax(SyntaxToken keyword, SyntaxToken identifier, SyntaxToken equalsToken, ExpressionSyntax lowerBound, SyntaxToken toKeyword, ExpressionSyntax upperBound, StatementSyntax body) {
-            Keyword = keyword;
+        public ForStatementSyntax(SyntaxToken forKeyword, SyntaxToken intKeyword, SyntaxToken identifier, SyntaxToken equalsToken, ExpressionSyntax lowerBound, SyntaxToken toKeyword, ExpressionSyntax upperBound, StatementSyntax body) {
+            ForKeyword = forKeyword;
+            IntKeyword = intKeyword;
             Identifier = identifier;
             EqualsToken = equalsToken;
             LowerBound = lowerBound;
@@ -11,7 +12,8 @@ namespace swifty.Code.Syntaxt {
             UpperBound = upperBound;
             Body = body;
         }
-        public SyntaxToken Keyword {get;}
+        public SyntaxToken ForKeyword {get;}
+        public SyntaxToken IntKeyword {get;}
         public SyntaxToken Identifier {get;} 
         public SyntaxToken EqualsToken {get;}
         public ExpressionSyntax LowerBound {get;} 
@@ -20,7 +22,8 @@ namespace swifty.Code.Syntaxt {
         public StatementSyntax Body {get;}
         public override SyntaxKind Kind => SyntaxKind.ForStatementSyntax;
         public override IEnumerable<SyntaxNode> GetChildren() {
-            yield return Keyword;
+            yield return ForKeyword;
+            yield return IntKeyword;
             yield return Identifier;
             yield return EqualsToken;
             yield return LowerBound;

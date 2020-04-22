@@ -38,6 +38,7 @@ namespace swifty.Code.Syntaxt {
         WhileKeyword,
         ForKeyword,
         ToKeyword,
+        KeywordToken, // default error token when a keyword is missing
         // Nodes
         CompilationUnit,
         // Statements
