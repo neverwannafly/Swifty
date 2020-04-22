@@ -29,20 +29,21 @@ namespace swifty {
                 
                 if (textBuilder.Length==0) {
                     if (isBlank) break;
-                    if (input == "#CLEAR") {
+                    if (input == "$CLEAR") {
                         Console.Clear();
                         continue;
                     }
-                    if (input == "#TREE") {
+                    if (input == "$TREE") {
                         showTree = true;
                         continue;
                     }
-                    if (input == "#HIDETREE") {
+                    if (input == "$HIDETREE") {
                         showTree = false;
                         continue;
                     }
-                    if (input == "#RESET") {
+                    if (input == "$RESET") {
                         prev = null;
+                        Console.Clear();
                         continue;
                     }
                 }

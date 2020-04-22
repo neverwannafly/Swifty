@@ -8,8 +8,9 @@ namespace swifty.tests.Code.Text {
 
         [Theory]
         [InlineData("1",1)]
-        [InlineData("true",true)]
-        [InlineData("false",false)]
+        [InlineData("True",true)]
+        [InlineData("const bool var:=True", true)]
+        [InlineData("False",false)]
         [InlineData("const int a:= 10", 10)]
         [InlineData("{int res:=0\nfor int i:=0 to 10 {\nres:=res+i\n}\n}", 45)]
        public void Evaluator_Computes_Correct_Value(string text, object expectedValue) {

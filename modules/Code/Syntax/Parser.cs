@@ -15,7 +15,7 @@ namespace swifty.Code.Syntaxt {
             List<SyntaxToken> tokens = new List<SyntaxToken>();
             do {
                 token = lexer.Lex();
-                if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind!=SyntaxKind.BadToken) {
+                if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind!=SyntaxKind.BadToken && token.Kind != SyntaxKind.CommentToken) {
                     tokens.Add(token);
                 }
             } while (token.Kind!=SyntaxKind.EndofFileToken);
@@ -153,7 +153,6 @@ namespace swifty.Code.Syntaxt {
                 left = new UnaryExpressionSyntax(opToken, operand);
             } else {
                 left = ParsePrimaryExpression();
-                // Console.WriteLine(left.Kind);
             }
             while (true) {
                 int precedence = Current.Kind.GetBinaryOperatorPrecendence();

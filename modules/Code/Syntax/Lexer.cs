@@ -20,6 +20,9 @@ namespace swifty.Code.Syntaxt {
             _position++;
         }
         public SyntaxToken Lex() {
+            if (Current == '#') {
+                return ReadComments();
+            }
             if (char.IsWhiteSpace(Current)) {
                 return ReadWhiteSpace();
             }
@@ -37,6 +40,13 @@ namespace swifty.Code.Syntaxt {
             int len = _position - start;
             string text = _text.ToString(start, len);
             return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
+        }
+        private SyntaxToken ReadComments() {
+            int start = _position;
+            while (Current != '\0') Next();
+            int len = _position - start;
+            string comment = _text.ToString(start, len);
+            return new SyntaxToken(SyntaxKind.CommentToken, start, comment, null);
         }
         private SyntaxToken ReadNumber() {
             int start = _position;
