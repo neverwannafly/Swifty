@@ -21,3 +21,8 @@ steps:
   inputs:
     testResultsFormat: 'XUnit'
     testResultsFiles: '**/TestResults.xml'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'swifty/swifty.csproj'
