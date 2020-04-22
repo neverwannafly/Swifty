@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using swifty.Code.Annotation;
+using swifty.Code.Syntaxt;
 
 namespace swifty.Code {
     internal class Evaluator {
@@ -59,6 +60,10 @@ namespace swifty.Code {
             throw new Exception($"Unexpected node {statement.Kind}");
         }
         private object EvaluateExpression(AnnotatedExpression root) {
+            if (root is AnnotatedTypeCastExpression t) {
+                var left = EvaluateExpression(t.Left);
+                return PerformTypeCast(left, t.Right);
+            }
             if (root is AnnotatedLiteralExpression n) {
                 return n.Value;
             }
@@ -109,6 +114,19 @@ namespace swifty.Code {
                 }
             }
             throw new Exception($"Unexpected node {root.Kind}");
+        }
+        private object PerformTypeCast(object left, SyntaxKind right) {
+            if (left.GetType() == typeof(int) && right == SyntaxKind.BoolKeyword) {
+                return (int)left != 0;
+            }
+            if (left.GetType() == typeof(bool) && right == SyntaxKind.IntKeyword) {
+                return (bool)left ? 1 : 0;
+            }
+            if ((left.GetType() == typeof(int) && right == SyntaxKind.IntKeyword) || (left.GetType() == typeof(bool) && right == SyntaxKind.BoolKeyword)) {
+                return left;
+            }
+            Console.WriteLine("Typecast failed");
+            return -1;
         }
     }
 }
