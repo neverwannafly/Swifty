@@ -98,16 +98,21 @@ namespace swifty.Code.Syntaxt {
             return new ElseClauseSyntax(keyword, statement);
         }
         private StatementSyntax ParseVariableDeclaration() {
-            var keyword = MatchToken(Current.Kind); 
-            bool isReadonly = false;
-            if (keyword.Kind == SyntaxKind.ConstKeyword) {
-                isReadonly = true;
-                keyword = MatchToken(Current.Kind);    
+            SyntaxToken constKeyword = null;
+            if (Current.Kind == SyntaxKind.ConstKeyword) {
+                constKeyword = NextToken();
+            }
+            bool isReadonly = (constKeyword==null ? false : true);
+            SyntaxToken datatypeKeyword;
+            switch(Current.Kind) {
+                case SyntaxKind.IntKeyword : datatypeKeyword = MatchToken(SyntaxKind.IntKeyword); break;
+                case SyntaxKind.BoolKeyword: datatypeKeyword = MatchToken(SyntaxKind.BoolKeyword); break;
+                default: datatypeKeyword = MatchToken(SyntaxKind.KeywordToken); break;
             }
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var assignmentToken = MatchToken(SyntaxKind.AssignmentToken);
             var initializer = ParseExpression();
-            return new VariableDeclarationSyntax(keyword, identifier, assignmentToken, initializer, isReadonly);
+            return new VariableDeclarationSyntax(constKeyword, datatypeKeyword, identifier, assignmentToken, initializer, isReadonly);
         }
         private ExpressionSyntax ParseAssignmentExpression() {
             if (Current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind==SyntaxKind.AssignmentToken) {
