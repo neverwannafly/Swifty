@@ -10,6 +10,8 @@ namespace swifty.tests.Code.Text {
         [InlineData("1",1)]
         [InlineData("true",true)]
         [InlineData("false",false)]
+        [InlineData("const int a:= 10", 10)]
+        [InlineData("{int res:=0\nfor i:=0 to 10 {\nres:=res+i\n}\n}", 45)]
        public void Evaluator_Computes_Correct_Value(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);
@@ -18,6 +20,22 @@ namespace swifty.tests.Code.Text {
 
            Assert.Empty(res.Diagnostics);
            Assert.Equal(expectedValue, res.Value);
+       }
+
+        [Theory]
+        [InlineData("const a := 10", 1)]
+        [InlineData("const", 4)]
+        [InlineData("const int", 3)]
+        [InlineData("const int a", 2)]
+        [InlineData("const int a :=", 1)]
+       public void Evaluator_Reports_Errors(string text, object expectedValue) {
+           var syntaxTree = SyntaxTree.Parse(text);
+           var compiler = new Compiler(syntaxTree);
+           var variables = new Dictionary<VariableSymbol,object>();
+           var res = compiler.EvaluationResult(variables);
+
+           Assert.NotEmpty(res.Diagnostics);
+           Assert.Equal(expectedValue, res.Diagnostics.Count);
        }
     }
 }
