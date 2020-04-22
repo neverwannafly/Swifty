@@ -1,6 +1,8 @@
 # SWIFTY
 [![Build Status](https://dev.azure.com/shubhamchess/Swifty/_apis/build/status/neverwannafly.Swifty?branchName=master)](https://dev.azure.com/shubhamchess/Swifty/_build/latest?definitionId=1&branchName=master)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/neverwannafly/Swifty.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/neverwannafly/Swifty/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/neverwannafly/Swifty.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/neverwannafly/Swifty/context:javascript)
+[![Language grade: C#](https://img.shields.io/lgtm/grade/csharp/g/neverwannafly/Swifty.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/neverwannafly/Swifty/context:csharp)
 
 ## CodeEditor Preview
 <p align="center"><img src="img/demo.png" alt="Swifty"></p>
@@ -17,9 +19,9 @@ const bool b := false
 + - * / := & | ^ && || == { } ( ) ! > < >= <= 
 
 /* control flows and loops */
-if i > 10 {} else {}   // if else construct
-for i := 1 to 10 {}    // for loop construct
-while i < 10 {}        // while loop construct
+if i > 10 {} else {}       // if else construct
+for int i := 1 to 10 {}    // for loop construct
+while i < 10 {}            // while loop construct
 ```
 
 ## Getting everything ready!
