@@ -96,8 +96,11 @@ namespace swifty.Code.Annotation {
             var expression = AnnotateExpression(statement.Initializer);
             var name = statement.Identifier.Text;
             var variable = new VariableSymbol(name, expression.Type, statement.IsReadOnly);
-            if (statement.Keyword.Type != expression.Type) {
-                _diagnostics.ReportInvalidRightValue(statement.Identifier.Span, name, statement.Keyword.Type, expression.Type);
+            if (statement.DatatypeKeyword.Kind == SyntaxKind.KeywordToken || name == null) {
+                return new AnnotateVariableDeclaration(variable, expression);
+            }
+            if (statement.DatatypeKeyword.Type != expression.Type) {
+                _diagnostics.ReportInvalidRightValue(statement.Identifier.Span, name, statement.DatatypeKeyword.Type, expression.Type);
                 return new AnnotateVariableDeclaration(variable, expression);
             }
             if (!_scope.TryDeclare(variable)) {
