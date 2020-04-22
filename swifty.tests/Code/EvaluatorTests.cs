@@ -25,10 +25,15 @@ namespace swifty.tests.Code.Text {
         [Theory]
         [InlineData("const a := 10", 1)]
         [InlineData("const", 4)]
+        [InlineData("int", 3)]
         [InlineData("const int", 3)]
         [InlineData("const int a", 2)]
         [InlineData("const int a :=", 1)]
         [InlineData("{int res:=0\nfor i:=0 to 10 {\nres:=res+i\n}\n}", 1)]
+        [InlineData("{)}",1)]
+        [InlineData("{}}", 1)]
+        [InlineData("const int a := false", 1)]
+        [InlineData("{const int a := 10\na := 5}", 1)]
        public void Evaluator_Reports_Errors(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);
