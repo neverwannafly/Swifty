@@ -13,6 +13,8 @@ namespace swifty.tests.Code.Text {
         [InlineData("False",false)]
         [InlineData("const int a:= 10", 10)]
         [InlineData("{int res:=0\nfor int i:=0 to 10 {\nres:=res+i\n}\n}", 45)]
+        [InlineData("const int d := 100 # this is a single line comment!", 100)]
+        [InlineData("{int res:=0#kello\nfor int i:=0 to 11 {\nres:=res+i #hello\n}#dello\n}", 55)]
        public void Evaluator_Computes_Correct_Value(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);

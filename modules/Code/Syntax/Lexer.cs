@@ -1,4 +1,5 @@
 using swifty.Code.Text;
+using System;
 
 namespace swifty.Code.Syntaxt {
     internal sealed class Lexer {
@@ -43,9 +44,10 @@ namespace swifty.Code.Syntaxt {
         }
         private SyntaxToken ReadComments() {
             int start = _position;
-            while (Current != '\0') Next();
+            while (Current != '\0' && Current != '\n') Next();
             int len = _position - start;
             string comment = _text.ToString(start, len);
+            Console.WriteLine(comment);
             return new SyntaxToken(SyntaxKind.CommentToken, start, comment, null);
         }
         private SyntaxToken ReadNumber() {
