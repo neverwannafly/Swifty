@@ -20,9 +20,9 @@ let swiftyMode =  {
         {regex: /"(?:[^\\]|\\.)*?(?:"|$)/, token: "string"},
         {regex: /(function)(\s+)([a-z$][\w$]*)/, token: ["keyword", null, "variable-2"]},
         {regex: /(?:int|bool|const|to|if|for|while|else)\b/, token: "keyword"},
-        {regex: /true|false|null/, token: "atom"},
+        {regex: /True|False|null/, token: "atom"},
         {regex: /0x[a-f\d]+|[-+]?(?:\.\d+|\d+\.?\d*)(?:e[-+]?\d+)?/i, token: "number"},
-        {regex: /\/\/.*/, token: "comment"},
+        {regex: /#.*/, token: "comment"},
         {regex: /\/(?:[^\\]|\\.)*?\//, token: "variable-3"},
         {regex: /\/\*/, token: "comment", next: "comment"},
         {regex: /[-+\/:&!^}|{*=<>]+/, token: "operator"},
@@ -37,6 +37,6 @@ let swiftyMode =  {
     ],
     meta: {
         dontIndentStates: ["comment"],
-        lineComment: "//"
+        lineComment: "#"
     }
 };
