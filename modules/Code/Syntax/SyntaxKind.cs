@@ -3,6 +3,7 @@ namespace swifty.Code.Syntaxt {
         // Tokens
         NumberToken,
         WhitespaceToken,
+        CommentToken,
         PlusToken,
         MinusToken,
         StarToken,

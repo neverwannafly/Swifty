@@ -15,7 +15,7 @@ namespace swifty.Code.Syntaxt {
             List<SyntaxToken> tokens = new List<SyntaxToken>();
             do {
                 token = lexer.Lex();
-                if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind!=SyntaxKind.BadToken) {
+                if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind!=SyntaxKind.BadToken && token.Kind != SyntaxKind.CommentToken) {
                     tokens.Add(token);
                 }
             } while (token.Kind!=SyntaxKind.EndofFileToken);
@@ -176,6 +176,7 @@ namespace swifty.Code.Syntaxt {
                 case SyntaxKind.FalseKeyword: {
                     var keywordToken = NextToken();
                     var value = (keywordToken.Kind == SyntaxKind.TrueKeyword);
+                    Console.WriteLine(true);
                     return new LiteralExpressionSyntax(keywordToken, value);
                 }
                 case SyntaxKind.IdentifierToken: {
