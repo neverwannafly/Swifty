@@ -9,19 +9,21 @@
 
 ## Syntax (Currently Supported)
 ```
-/* Variable declarations */
+# Variable declarations #
 int a := 10
-bool a := true
+bool a := True
 const int a := 10
-const bool b := false
+const bool b := False
 
-/* operators */
+# operators #
 + - * / := & | ^ && || == { } ( ) ! > < >= <= 
+(expression)=>(datatype) :  typecast operator (usage: 10 => bool, True => int)
+                            returns -1 on failure
 
-/* control flows and loops */
-if i > 10 {} else {}       // if else construct
-for int i := 1 to 10 {}    // for loop construct
-while i < 10 {}            // while loop construct
+# control flows and loops #
+if i > 10 {} else {}       # if else construct
+for int i := 1 to 10 {}    # for loop construct
+while i < 10 {}            # while loop construct
 ```
 
 ## Getting everything ready!
