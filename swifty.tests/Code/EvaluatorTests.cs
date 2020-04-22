@@ -15,6 +15,9 @@ namespace swifty.tests.Code.Text {
         [InlineData("{int res:=0\nfor int i:=0 to 10 {\nres:=res+i\n}\n}", 45)]
         [InlineData("const int d := 100 # this is a single line comment!", 100)]
         [InlineData("{int res:=0#kello\nfor int i:=0 to 11 {\nres:=res+i #hello\n}#dello\n}", 55)]
+        [InlineData("1=>bool && 10=>bool", true)]
+        [InlineData("True=>int + 100", 101)]
+        [InlineData("{!((True=>int-1)=>bool)=>int+5}", 6)]
        public void Evaluator_Computes_Correct_Value(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);
@@ -37,6 +40,9 @@ namespace swifty.tests.Code.Text {
         [InlineData("{}}", 1)]
         [InlineData("const int a := false", 1)]
         [InlineData("{const int a := 10\na := 5}", 1)]
+        [InlineData("int => bool", 3)]
+        [InlineData("hello => int", 1)]
+        [InlineData("int => hello", 5)]
        public void Evaluator_Reports_Errors(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);
