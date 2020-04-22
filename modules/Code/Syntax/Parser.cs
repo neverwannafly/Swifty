@@ -67,14 +67,15 @@ namespace swifty.Code.Syntaxt {
             return ParseExpressionStatement();
         }
         private StatementSyntax ParseForStatement() {
-            var keyword = MatchToken(SyntaxKind.ForKeyword);
+            var forKeyword = MatchToken(SyntaxKind.ForKeyword);
+            var intKeyword = MatchToken(SyntaxKind.IntKeyword);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var equalsToken = MatchToken(SyntaxKind.AssignmentToken);
             var lowerBound = ParseExpression();
             var toKeyword = MatchToken(SyntaxKind.ToKeyword);
             var upperBound = ParseExpression();
             var body = ParseStatement();
-            return new ForStatementSyntax(keyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
+            return new ForStatementSyntax(forKeyword, intKeyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
         }
         private StatementSyntax ParseWhileStatement() {
             var keyword = MatchToken(SyntaxKind.WhileKeyword);

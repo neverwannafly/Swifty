@@ -11,7 +11,7 @@ namespace swifty.tests.Code.Text {
         [InlineData("true",true)]
         [InlineData("false",false)]
         [InlineData("const int a:= 10", 10)]
-        [InlineData("{int res:=0\nfor i:=0 to 10 {\nres:=res+i\n}\n}", 45)]
+        [InlineData("{int res:=0\nfor int i:=0 to 10 {\nres:=res+i\n}\n}", 45)]
        public void Evaluator_Computes_Correct_Value(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);
@@ -28,6 +28,7 @@ namespace swifty.tests.Code.Text {
         [InlineData("const int", 3)]
         [InlineData("const int a", 2)]
         [InlineData("const int a :=", 1)]
+        [InlineData("{int res:=0\nfor i:=0 to 10 {\nres:=res+i\n}\n}", 1)]
        public void Evaluator_Reports_Errors(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);
