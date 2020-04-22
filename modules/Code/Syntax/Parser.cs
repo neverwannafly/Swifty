@@ -153,7 +153,6 @@ namespace swifty.Code.Syntaxt {
                 left = new UnaryExpressionSyntax(opToken, operand);
             } else {
                 left = ParsePrimaryExpression();
-                // Console.WriteLine(left.Kind);
             }
             while (true) {
                 int precedence = Current.Kind.GetBinaryOperatorPrecendence();
@@ -176,7 +175,6 @@ namespace swifty.Code.Syntaxt {
                 case SyntaxKind.FalseKeyword: {
                     var keywordToken = NextToken();
                     var value = (keywordToken.Kind == SyntaxKind.TrueKeyword);
-                    Console.WriteLine(true);
                     return new LiteralExpressionSyntax(keywordToken, value);
                 }
                 case SyntaxKind.IdentifierToken: {

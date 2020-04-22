@@ -85,8 +85,8 @@ namespace swifty.tests.Code.Syntax {
                 (SyntaxKind.LeftParanthesisToken, "("),
                 (SyntaxKind.RightParanthesisToken, ")"),
                 // Keywords
-                (SyntaxKind.TrueKeyword, "true"),
-                (SyntaxKind.FalseKeyword, "false"),
+                (SyntaxKind.TrueKeyword, "True"),
+                (SyntaxKind.FalseKeyword, "False"),
             };
         }
         private static IEnumerable<(SyntaxKind  kind1, string text1, SyntaxKind  kind2, string text2)> GetTokenPair() {
