@@ -83,6 +83,7 @@ namespace swifty.Code.Syntaxt {
                 case '/':  return new SyntaxToken(SyntaxKind.DivideToken, _position++, "/", null);
                 case '(':  return new SyntaxToken(SyntaxKind.LeftParanthesisToken, _position++, "(", null);
                 case ')':  return new SyntaxToken(SyntaxKind.RightParanthesisToken, _position++, ")", null);
+                case '~': return new SyntaxToken(SyntaxKind.BitwiseNegationToken, _position++, "~", null);
                 case '>': {
                     if (LookAhead=='=') {
                         _position += 2;

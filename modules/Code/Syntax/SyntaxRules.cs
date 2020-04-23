@@ -21,14 +21,16 @@ namespace swifty.Code.Syntaxt {
                 default:                                return 0;
             }
         }
+        // All Unary Operators should have similar precedences and 
+        // higher than every binary operator precedence so they dont get
+        //  misclassified as a binary operator.
         internal static int GetUnaryOperatorPrecedence(this SyntaxKind kind) {
             switch(kind) {
-                case SyntaxKind.NotToken:       return 9;
-                case SyntaxKind.LogicalAndToken:       return 8;
-                case SyntaxKind.LogicalOrToken:        return 7;
-                case SyntaxKind.PlusToken:      return 6;
-                case SyntaxKind.MinusToken:     return 6;
-                default:                        return 0;
+                case SyntaxKind.NotToken:               return 8;
+                case SyntaxKind.BitwiseNegationToken:   return 8;
+                case SyntaxKind.PlusToken:              return 8;
+                case SyntaxKind.MinusToken:             return 8;
+                default:                                return 0;
             }
         }
 

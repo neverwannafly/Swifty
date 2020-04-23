@@ -29,6 +29,7 @@ namespace swifty.Code.Syntaxt {
         EndofFileToken,
         IdentifierToken,
         BadToken,
+        BitwiseNegationToken,
         // Keywords
         TrueKeyword,
         FalseKeyword,

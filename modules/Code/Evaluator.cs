@@ -81,6 +81,7 @@ namespace swifty.Code {
                     case AnnotatedUnaryOperatorKind.Identity: return (int)operand;
                     case AnnotatedUnaryOperatorKind.Negation: return -(int)operand;
                     case AnnotatedUnaryOperatorKind.LogicalNegation: return !(bool)operand;
+                    case AnnotatedUnaryOperatorKind.BitwiseNegation: return ~(int)operand;
                     default: throw new Exception($"Unexpected Unary expression {u.Operator.Kind}");
                 }
             }
