@@ -35,6 +35,9 @@ namespace swifty.Code.Annotation {
             new AnnotatedBinaryOperator(SyntaxKind.XorToken, AnnotatedBinaryOperatorKind.Xor, typeof(int)), 
             new AnnotatedBinaryOperator(SyntaxKind.AndToken, AnnotatedBinaryOperatorKind.And, typeof(int)),
             new AnnotatedBinaryOperator(SyntaxKind.OrToken, AnnotatedBinaryOperatorKind.Or, typeof(int)),
+            new AnnotatedBinaryOperator(SyntaxKind.XorToken, AnnotatedBinaryOperatorKind.Xor, typeof(bool)), 
+            new AnnotatedBinaryOperator(SyntaxKind.AndToken, AnnotatedBinaryOperatorKind.And, typeof(bool)),
+            new AnnotatedBinaryOperator(SyntaxKind.OrToken, AnnotatedBinaryOperatorKind.Or, typeof(bool)),
         };
         public static AnnotatedBinaryOperator Annotate(SyntaxKind syntaxKind, Type leftType, Type rightType) {
             foreach (var op in _operators) {
