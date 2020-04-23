@@ -16,7 +16,11 @@ const int a := 10
 const bool b := False
 
 # operators #
-+ - * / := & | ^ && || == { } ( ) ! > < >= <= 
+# 1) Unary Operators
+- + ! ~
+# 2) Binary Operators
+- + * / := & | ^ && || == { } ( ) > < >= <=
+# 3) Typecast Operator
 (expression)=>(datatype) :  typecast operator (usage: 10 => bool, True => int)
                             returns -1 on failure
 
