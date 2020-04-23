@@ -18,6 +18,7 @@ namespace swifty.Code.Annotation {
             new AnnotatedUnaryOperator(SyntaxKind.NotToken, AnnotatedUnaryOperatorKind.LogicalNegation, typeof(bool)),
             new AnnotatedUnaryOperator(SyntaxKind.PlusToken, AnnotatedUnaryOperatorKind.Identity, typeof(int)),
             new AnnotatedUnaryOperator(SyntaxKind.MinusToken, AnnotatedUnaryOperatorKind.Negation, typeof(int)),
+            new AnnotatedUnaryOperator(SyntaxKind.BitwiseNegationToken, AnnotatedUnaryOperatorKind.BitwiseNegation, typeof(int)),
         };
         public static AnnotatedUnaryOperator Annotate(SyntaxKind syntaxKind, Type operandType) {
             foreach (var op in _operators) {

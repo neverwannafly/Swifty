@@ -3,5 +3,6 @@ namespace swifty.Code.Annotation {
         Identity,
         Negation,
         LogicalNegation,
+        BitwiseNegation,
     }
 }

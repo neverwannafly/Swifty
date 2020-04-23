@@ -84,6 +84,8 @@ namespace swifty.tests.Code.Syntax {
                 (SyntaxKind.XorToken, "^"),
                 (SyntaxKind.LeftParanthesisToken, "("),
                 (SyntaxKind.RightParanthesisToken, ")"),
+                (SyntaxKind.BitwiseNegationToken, "~"),
+                (SyntaxKind.TypeCastToken, "=>"),
                 // Keywords
                 (SyntaxKind.TrueKeyword, "True"),
                 (SyntaxKind.FalseKeyword, "False"),

@@ -18,6 +18,19 @@ namespace swifty.tests.Code.Text {
         [InlineData("1=>bool && 10=>bool", true)]
         [InlineData("True=>int + 100", 101)]
         [InlineData("{!((True=>int-1)=>bool)=>int+5}", 6)]
+        [InlineData("10&1", 0)]
+        [InlineData("11&1", 1)]
+        [InlineData("15|13", 15)]
+        [InlineData("True|True", true)]
+        [InlineData("False&True", false)]
+        [InlineData("False^True", true)]
+        [InlineData("True^True", false)]
+        [InlineData("False^100=>bool", true)]
+        [InlineData("---++10", -10)]
+        [InlineData("True && True && True && 10=>bool", true)]
+        [InlineData("True || False || 0=>bool && True", true)]
+        [InlineData("~16", -17)]
+        [InlineData("~(-1)", 0)]
        public void Evaluator_Computes_Correct_Value(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);
@@ -43,6 +56,8 @@ namespace swifty.tests.Code.Text {
         [InlineData("int => bool", 3)]
         [InlineData("hello => int", 1)]
         [InlineData("int => hello", 5)]
+        [InlineData("1^true", 1)]
+        [InlineData("!-1", 1)]
        public void Evaluator_Reports_Errors(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);

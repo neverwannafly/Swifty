@@ -81,6 +81,7 @@ namespace swifty.Code {
                     case AnnotatedUnaryOperatorKind.Identity: return (int)operand;
                     case AnnotatedUnaryOperatorKind.Negation: return -(int)operand;
                     case AnnotatedUnaryOperatorKind.LogicalNegation: return !(bool)operand;
+                    case AnnotatedUnaryOperatorKind.BitwiseNegation: return ~(int)operand;
                     default: throw new Exception($"Unexpected Unary expression {u.Operator.Kind}");
                 }
             }
@@ -100,9 +101,9 @@ namespace swifty.Code {
                     }
                     case AnnotatedBinaryOperatorKind.LogicalAnd : return (bool)left && (bool)right;
                     case AnnotatedBinaryOperatorKind.LogicalOr: return (bool)left || (bool)right;
-                    case AnnotatedBinaryOperatorKind.Xor: return (int)left ^ (int)right;
-                    case AnnotatedBinaryOperatorKind.And: return (int)left & (int)right;
-                    case AnnotatedBinaryOperatorKind.Or: return (int)left | (int)right;
+                    case AnnotatedBinaryOperatorKind.Xor: return PerformBooleanOperation(left, AnnotatedBinaryOperatorKind.Xor, right);
+                    case AnnotatedBinaryOperatorKind.And: return PerformBooleanOperation(left, AnnotatedBinaryOperatorKind.And, right);
+                    case AnnotatedBinaryOperatorKind.Or: return PerformBooleanOperation(left, AnnotatedBinaryOperatorKind.Or, right);
                     case AnnotatedBinaryOperatorKind.Equality: return Equals(left, right);
                     case AnnotatedBinaryOperatorKind.Inequality:
                     return !Equals(left, right);
@@ -114,6 +115,34 @@ namespace swifty.Code {
                 }
             }
             throw new Exception($"Unexpected node {root.Kind}");
+        }
+        private object PerformBooleanOperation(object left, AnnotatedBinaryOperatorKind op, object right) {
+            Type operandTypeLeft = left.GetType();
+            Type operandTypeRight = right.GetType();
+
+            if(operandTypeLeft == typeof(int) && operandTypeRight == typeof(int)) {
+                return ApplyOperator((int)left, op, (int)right);
+            }
+            if (operandTypeLeft == typeof(bool) && operandTypeRight == typeof(bool)) {
+                return ApplyOperator((bool)left, op, (bool)right);
+            }
+            throw new Exception("Invalid operands to boolean operators");
+        }
+        private int ApplyOperator(int left, AnnotatedBinaryOperatorKind op, int right) {
+            switch(op) {
+                case AnnotatedBinaryOperatorKind.Xor: return left^right;
+                case AnnotatedBinaryOperatorKind.And: return left&right;
+                case AnnotatedBinaryOperatorKind.Or: return left|right;
+            }
+            throw new Exception("Invalid BooleanOperator");
+        }
+        private bool ApplyOperator(bool left, AnnotatedBinaryOperatorKind op, bool right) {
+            switch(op) {
+                case AnnotatedBinaryOperatorKind.Xor: return left^right;
+                case AnnotatedBinaryOperatorKind.And: return left&right;
+                case AnnotatedBinaryOperatorKind.Or: return left|right;
+            }
+            throw new Exception("Invalid BooleanOperator");
         }
         private object PerformTypeCast(object left, SyntaxKind right) {
             if (left.GetType() == typeof(int) && right == SyntaxKind.BoolKeyword) {
