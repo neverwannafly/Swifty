@@ -19,9 +19,9 @@ namespace swifty {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
 
                 if (textBuilder.Length  == 0) {
-                    Console.Write("> ");
+                    Console.Write(">> ");
                 } else {
-                    Console.Write(". ");
+                    Console.Write(".. ");
                 }
 
                 string input = Console.ReadLine();
