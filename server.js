@@ -69,6 +69,6 @@ function preprocessData(data) {
         }
         newData = (newData + text[i] + '\n');
     }
-    newData = `{\n${newData}}\n\n`;
+    newData = `${newData}`;
     return newData;
 }
