@@ -33,6 +33,9 @@ namespace swifty.Code.Syntaxt {
             if (char.IsLetter(Current)) {
                 return ReadString();
             }
+            if (Current == '\'') {
+                return ReadStringLiteral();
+            }
             return ReadOperators();
         }
         private SyntaxToken ReadWhiteSpace() {
@@ -71,8 +74,19 @@ namespace swifty.Code.Syntaxt {
             switch(kind) {
                 case SyntaxKind.IntKeyword: return new SyntaxToken(kind, start, text, null, typeof(int));
                 case SyntaxKind.BoolKeyword: return new SyntaxToken(kind, start, text, null, typeof(bool));
+                case SyntaxKind.CharKeyword: return new SyntaxToken(kind, start, text, null, typeof(char));
                 default: return new SyntaxToken(kind, start, text, null);
             }
+        }
+        private SyntaxToken ReadStringLiteral() {
+            int start = ++_position;
+            while (char.IsLetter(Current)) Next();
+            int len = _position++ - start;
+            string text = _text.ToString(start, len);
+            if (!char.TryParse(text, out var value)) {
+                _diagnostics.ReportInvalidCharacter(new TextSpan(start, len), text, typeof(char));
+            }
+            return new SyntaxToken(SyntaxKind.CharToken, start, text, value);
         }
         private SyntaxToken ReadOperators() {
             switch(Current) {

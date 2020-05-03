@@ -38,6 +38,7 @@ namespace swifty.Code.Syntaxt {
             switch(text) {
                 case "True": return SyntaxKind.TrueKeyword;
                 case "False": return SyntaxKind.FalseKeyword;
+                case "char": return SyntaxKind.CharKeyword;
                 case "int": return SyntaxKind.IntKeyword;
                 case "bool": return SyntaxKind.BoolKeyword;
                 case "const": return SyntaxKind.ConstKeyword;

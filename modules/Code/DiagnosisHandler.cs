@@ -61,5 +61,9 @@ namespace swifty.Code {
             var message = $"SEMANTIC_ERROR: Inconsistent Lvalue and Rvalue for Variable '{name}', expected '{expected}' but got '{actual}'";
             Report(span, message);
         }
+        public void ReportInvalidCharacter(TextSpan span, string text, Type type) {
+            var message = $"LEXICAL_ERROR: The character {text} isnt valid {type}.";
+            Report(span, message);
+        }
     }
 }

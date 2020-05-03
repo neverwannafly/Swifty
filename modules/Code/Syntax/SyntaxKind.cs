@@ -2,6 +2,7 @@ namespace swifty.Code.Syntaxt {
     public enum SyntaxKind {
         // Tokens
         NumberToken,
+        CharToken,
         WhitespaceToken,
         CommentToken,
         PlusToken,
@@ -34,6 +35,7 @@ namespace swifty.Code.Syntaxt {
         TrueKeyword,
         FalseKeyword,
         IntKeyword,
+        CharKeyword,
         BoolKeyword,
         ConstKeyword,
         IfKeyword,
