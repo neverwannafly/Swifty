@@ -31,6 +31,9 @@ namespace swifty.tests.Code.Text {
         [InlineData("True || False || 0=>bool && True", true)]
         [InlineData("~16", -17)]
         [InlineData("~(-1)", 0)]
+        [InlineData("const char a:= 'c'", 'c')]
+        [InlineData("const char a:= '1'", '1')]
+        [InlineData("char f:='$'", '$')]
        public void Evaluator_Computes_Correct_Value(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);
@@ -58,6 +61,9 @@ namespace swifty.tests.Code.Text {
         [InlineData("int => hello", 5)]
         [InlineData("1^true", 1)]
         [InlineData("!-1", 1)]
+        [InlineData("const char a:= 'sw'", 1)]
+        [InlineData("const char b:= 's", 1)]
+        [InlineData("const char b:= 'sswsw", 2)]
        public void Evaluator_Reports_Errors(string text, object expectedValue) {
            var syntaxTree = SyntaxTree.Parse(text);
            var compiler = new Compiler(syntaxTree);

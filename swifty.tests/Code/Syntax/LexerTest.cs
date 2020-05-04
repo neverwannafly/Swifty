@@ -97,6 +97,7 @@ namespace swifty.tests.Code.Syntax {
                 (SyntaxKind.ElseKeyword, "else"),
                 (SyntaxKind.IntKeyword, "int"),
                 (SyntaxKind.ConstKeyword, "const"),
+                (SyntaxKind.CharKeyword, "char"),
             };
         }
         private static IEnumerable<(SyntaxKind  kind1, string text1, SyntaxKind  kind2, string text2)> GetTokenPair() {

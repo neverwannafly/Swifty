@@ -52,7 +52,7 @@ namespace swifty.Code.Syntaxt {
             if (Current.Kind == SyntaxKind.OpenBraceToken) {
                 return ParseBlockStatement();
             }
-            if (Current.Kind == SyntaxKind.ConstKeyword || Current.Kind == SyntaxKind.IntKeyword || Current.Kind == SyntaxKind.BoolKeyword) {
+            if (Current.Kind == SyntaxKind.ConstKeyword || Current.Kind == SyntaxKind.IntKeyword || Current.Kind == SyntaxKind.BoolKeyword || Current.Kind == SyntaxKind.CharKeyword) {
                 return ParseVariableDeclaration();
             }
             if (Current.Kind == SyntaxKind.IfKeyword) {
@@ -168,6 +168,7 @@ namespace swifty.Code.Syntaxt {
             switch(Current.Kind) {
                 case SyntaxKind.IntKeyword : keywordToken = MatchToken(SyntaxKind.IntKeyword); break;
                 case SyntaxKind.BoolKeyword: keywordToken = MatchToken(SyntaxKind.BoolKeyword); break;
+                case SyntaxKind.CharKeyword: keywordToken = MatchToken(SyntaxKind.CharKeyword); break;
                 default: keywordToken = MatchToken(SyntaxKind.KeywordToken); break;
             }
             return keywordToken;
@@ -189,6 +190,10 @@ namespace swifty.Code.Syntaxt {
                 case SyntaxKind.IdentifierToken: {
                     var identifierToken = NextToken();
                     return new NameExpressionSyntax(identifierToken);
+                }
+                case SyntaxKind.CharToken: {
+                    var characterLiteral = MatchToken(SyntaxKind.CharToken);
+                    return new LiteralExpressionSyntax(characterLiteral);
                 }
                 default: {
                     SyntaxToken numberToken = MatchToken(SyntaxKind.NumberToken);
