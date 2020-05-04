@@ -9,7 +9,7 @@ namespace swifty.Code.Text {
         public int End => Start + Length;
 
         public static TextSpan FromBound(int start, int end) {
-            int length = end - start;
+            int length = System.Math.Max(end - start, 0);
             return new TextSpan(start, length);
         }
     }
