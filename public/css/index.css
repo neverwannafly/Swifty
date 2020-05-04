@@ -78,3 +78,6 @@ body {
     overflow-x: scroll!important;
     overflow-y: scroll!important;
 }
+.CodeMirror {
+	font-size: 16px;
+}

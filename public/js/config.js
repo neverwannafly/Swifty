@@ -17,9 +17,9 @@ let treeConfig = {
 
 let swiftyMode =  {
     start: [
-        {regex: /"(?:[^\\]|\\.)*?(?:"|$)/, token: "string"},
+        {regex: /'(?:[^\\]|\\.)*?(?:'|$)/, token: "string"},
         {regex: /(function)(\s+)([a-z$][\w$]*)/, token: ["keyword", null, "variable-2"]},
-        {regex: /(?:int|bool|const|to|if|for|while|else)\b/, token: "keyword"},
+        {regex: /(?:int|bool|const|to|if|for|while|char|else)\b/, token: "keyword"},
         {regex: /True|False|null/, token: "atom"},
         {regex: /0x[a-f\d]+|[-+]?(?:\.\d+|\d+\.?\d*)(?:e[-+]?\d+)?/i, token: "number"},
         {regex: /#.*/, token: "comment"},
