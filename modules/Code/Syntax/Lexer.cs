@@ -80,12 +80,16 @@ namespace swifty.Code.Syntaxt {
         }
         private SyntaxToken ReadStringLiteral() {
             int start = ++_position;
-            while (char.IsLetter(Current)) Next();
-            int len = _position++ - start;
+            while (Current!='\'' && Current != '\0') Next();
+            int len = _position - start;
             string text = _text.ToString(start, len);
+            if (Current != '\'') {
+                _diagnostics.ReportMissingQuotes(new TextSpan(start, len), text);
+            }
             if (!char.TryParse(text, out var value)) {
                 _diagnostics.ReportInvalidCharacter(new TextSpan(start, len), text, typeof(char));
             }
+            _position += 1;
             return new SyntaxToken(SyntaxKind.CharToken, start, text, value);
         }
         private SyntaxToken ReadOperators() {
