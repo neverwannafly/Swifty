@@ -11,9 +11,11 @@
 ```
 # Variable declarations #
 int a := 10
-bool a := True
-const int a := 10
+bool b := True
+char c := '$' 
+const int a := -8
 const bool b := False
+const char c := '9'
 
 # operators #
 # 1) Unary Operators
