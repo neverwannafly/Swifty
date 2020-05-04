@@ -65,5 +65,9 @@ namespace swifty.Code {
             var message = $"LEXICAL_ERROR: The character {text} isnt valid {type}.";
             Report(span, message);
         }
+        public void ReportMissingQuotes(TextSpan span, string text) {
+            var message = $"LEXICAL_ERROR: Quotes missing around {text}";
+            Report(span, message);
+        }
     }
 }
