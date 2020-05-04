@@ -15,6 +15,13 @@ $("#output").children()[0].id = "output-client";
 const treeClient = CodeMirror(tree, treeConfig);
 $("#tree").children()[0].id = "tree-client";
 
+document.addEventListener('keypress', function(event){
+    if (event.key === 'Enter' && event.shiftKey) {         
+        runButton.click();
+        event.preventDefault();
+    }
+});
+
 buildButton.addEventListener('click', function(){
     const code = editorClient.getValue();
     const lines = editorClient.lineCount();
