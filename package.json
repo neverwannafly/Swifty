@@ -21,7 +21,7 @@
     "@popperjs/core": "^2.3.3",
     "bootstrap": "^4.4.1",
     "codemirror": "^5.52.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-rate-limit": "^5.1.1",
     "jquery": "^3.5.0",
     "nodemon": "^2.0.3",
